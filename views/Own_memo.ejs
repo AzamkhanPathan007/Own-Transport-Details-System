@@ -11,17 +11,16 @@
 
 </head>
 
-<body>
-<!-- <body onbeforeunload="cacheValue()" onload="populateCachedValue()"> -->
-  <!-- <script>
+<body onbeforeunload="cacheValue()" onload="populateCachedValue()">
+  <script>
     function cacheValue() {
 
-      const form = document.getElementById('main');
-
-      const formData = new FormData(form);
-      for (const pair of formData.entries()) {
-        sessionStorage.setItem(pair[0], pair[1])
-        console.log(pair[0], pair[1]);
+      const form = document.getElementById('main'), formData = new FormData(form).entries()
+      
+      for (const pair of formData) {
+        const [key, value] = pair
+        sessionStorage.setItem(key, value)
+        console.log(key, value);
 
       }
     }
@@ -44,13 +43,14 @@
 
       const formData = new FormData(form);
       for (const pair of formData.entries()) {
-        const element = form.elements.namedItem(pair[0]);
+        const [key] = pair
+        const element = form.elements.namedItem(key);
         element.value = ""
 
       }
       
     }
-  </script> -->
+  </script>
   <nav id="navbar">
     <ul id="navigation">
       <li class="nav_items"><a href=<%=OTSMEMOURL %>>OTS MEMO</a></li>

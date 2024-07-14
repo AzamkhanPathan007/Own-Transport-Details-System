@@ -1,18 +1,18 @@
 import { Controller, Get, Render, Post, Req, Res, Body } from '@nestjs/common';
-import { VijayService } from './vijay.service';
+import { VijayService } from '@vijay/vijay.service';
 import {
-  CUSTOMLOGOBASE64,
-  MEMOPDF,
-  RENDEREDOBJ,
-  SIGNATUREBASE64,
-  SLIPPDF,
-  VARLCUSTOMHEADING,
-  VARLLOGOBASE64,
-} from 'src/constants/constant_variables';
+  CUSTOM_LOGO_BASE64,
+  MEMO_PDF,
+  RENDERED_OBJ,
+  SIGNATURE_BASE64,
+  SLIP_PDF,
+  VARL_CUSTOM_HEADING,
+  VARL_LOGO_BASE64,
+} from '@constants/constant_variables';
 import { Request, Response } from 'express';
-import { CreateSlipDto } from 'src/common_dto/create_slip';
-import { CreateMemoDto } from 'src/common_dto/create_memo';
-import { PDFCreator } from 'src/services/create_pdf';
+import { CreateSlipDto } from '@commonDto/create_slip';
+import { CreateMemoDto } from '@commonDto/create_memo';
+import { PDFCreator } from '@services/create_pdf';
 import { Readable } from 'node:stream';
 import { readFile } from 'node:fs/promises';
 
@@ -23,7 +23,7 @@ export class VijayController {
   @Get('/memo')
   @Render('Vijay_memo')
   getVijayMemo() {
-    return RENDEREDOBJ;
+    return RENDERED_OBJ;
   }
   @Post('/memo')
   async createVijayMemo(
@@ -33,11 +33,15 @@ export class VijayController {
   ) {
     const { Calculated_collection, Balance, Grand_total, Truck_number } = body;
 
-    const Company_logo = await readFile(VARLLOGOBASE64, { encoding: 'utf-8' });
+    const Company_logo = await readFile(VARL_LOGO_BASE64, {
+      encoding: 'utf-8',
+    });
 
-    const Custom_logo = await readFile(CUSTOMLOGOBASE64, { encoding: 'utf-8' });
+    const Custom_logo = await readFile(CUSTOM_LOGO_BASE64, {
+      encoding: 'utf-8',
+    });
 
-    const Custom_signature = await readFile(SIGNATUREBASE64, {
+    const Custom_signature = await readFile(SIGNATURE_BASE64, {
       encoding: 'utf-8',
     });
 
@@ -48,11 +52,11 @@ export class VijayController {
       Grand_total,
       Company_logo,
       Custom_logo,
-      Custom_heading: VARLCUSTOMHEADING,
+      Custom_heading: VARL_CUSTOM_HEADING,
       Custom_signature,
     };
 
-    const pdfCreator = new PDFCreator(manipulatedBody, MEMOPDF);
+    const pdfCreator = new PDFCreator(manipulatedBody, MEMO_PDF);
 
     const stream = new Readable();
 
@@ -74,7 +78,7 @@ export class VijayController {
   @Get('/slip')
   @Render('Vijay_slip')
   getVijaySlip() {
-    return RENDEREDOBJ;
+    return RENDERED_OBJ;
   }
 
   @Post('/slip')
@@ -85,11 +89,15 @@ export class VijayController {
   ) {
     const { Truck_number } = body;
 
-    const Company_logo = await readFile(VARLLOGOBASE64, { encoding: 'utf-8' });
+    const Company_logo = await readFile(VARL_LOGO_BASE64, {
+      encoding: 'utf-8',
+    });
 
-    const Custom_logo = await readFile(CUSTOMLOGOBASE64, { encoding: 'utf-8' });
+    const Custom_logo = await readFile(CUSTOM_LOGO_BASE64, {
+      encoding: 'utf-8',
+    });
 
-    const Custom_signature = await readFile(SIGNATUREBASE64, {
+    const Custom_signature = await readFile(SIGNATURE_BASE64, {
       encoding: 'utf-8',
     });
 
@@ -97,11 +105,11 @@ export class VijayController {
       ...body,
       Company_logo,
       Custom_logo,
-      Custom_heading: VARLCUSTOMHEADING,
+      Custom_heading: VARL_CUSTOM_HEADING,
       Custom_signature,
     };
 
-    const pdfCreator = new PDFCreator(manipulatedBody, SLIPPDF);
+    const pdfCreator = new PDFCreator(manipulatedBody, SLIP_PDF);
 
     const stream = new Readable();
 

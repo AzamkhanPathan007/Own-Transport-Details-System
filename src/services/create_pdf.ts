@@ -1,5 +1,5 @@
-import { CreateMemoDto } from 'src/common_dto/create_memo';
-import { CreateSlipDto } from 'src/common_dto/create_slip';
+import { CreateMemoDto } from '@commonDto/create_memo';
+import { CreateSlipDto } from '@commonDto/create_slip';
 import { launch } from 'puppeteer';
 import { renderFile } from 'ejs';
 

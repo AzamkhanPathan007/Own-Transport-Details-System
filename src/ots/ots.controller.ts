@@ -8,11 +8,11 @@ import {
   RENDEREDOBJ,
   SIGNATUREBASE64,
   SLIPPDF,
-} from 'src/constants/constant_variables';
-import { CreateSlipDto } from 'src/common_dto/create_slip';
-import { CreateMemoDto } from 'src/common_dto/create_memo';
+} from '@constants/constant_variables';
+import { CreateSlipDto } from '@commonDto/create_slip';
+import { CreateMemoDto } from '@commonDto/create_memo';
 import { Request, Response } from 'express';
-import { PDFCreator } from 'src/services/create_pdf';
+import { PDFCreator } from '@services/create_pdf';
 import { Readable } from 'stream';
 import { readFile } from 'fs/promises';
 

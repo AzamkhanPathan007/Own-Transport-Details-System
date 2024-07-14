@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { VijayController } from './vijay.controller';
-import { VijayService } from './vijay.service';
+import { VijayController } from '@vijay/vijay.controller';
+import { VijayService } from '@vijay/vijay.service';
 
 describe('VijayController', () => {
   let controller: VijayController;
