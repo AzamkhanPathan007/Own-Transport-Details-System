@@ -1,5 +1,4 @@
 import { Controller, Get, Render, Post, Req, Res, Body } from '@nestjs/common';
-import { VijayService } from '@vijay/vijay.service';
 import {
   CUSTOM_LOGO_BASE64,
   MEMO_PDF,
@@ -14,12 +13,9 @@ import { CreateSlipDto } from '@commonDto/create_slip';
 import { CreateMemoDto } from '@commonDto/create_memo';
 import { PDFCreator } from '@services/create_pdf';
 import { Readable } from 'node:stream';
-import { readFile } from 'node:fs/promises';
 
 @Controller('vijay')
 export class VijayController {
-  constructor(private readonly vijayService: VijayService) {}
-
   @Get('/memo')
   @Render('Vijay_memo')
   getVijayMemo() {
@@ -31,36 +27,20 @@ export class VijayController {
     @Res() res: Response,
     @Body() body: CreateMemoDto,
   ) {
-    const { Calculated_collection, Balance, Grand_total, Truck_number } = body;
-
-    const Company_logo = await readFile(VARL_LOGO_BASE64, {
-      encoding: 'utf-8',
-    });
-
-    const Custom_logo = await readFile(CUSTOM_LOGO_BASE64, {
-      encoding: 'utf-8',
-    });
-
-    const Custom_signature = await readFile(SIGNATURE_BASE64, {
-      encoding: 'utf-8',
-    });
-
-    const manipulatedBody = {
-      ...body,
-      Calculated_collection,
-      Balance,
-      Grand_total,
-      Company_logo,
-      Custom_logo,
-      Custom_heading: VARL_CUSTOM_HEADING,
-      Custom_signature,
-    };
-
-    const pdfCreator = new PDFCreator(manipulatedBody, MEMO_PDF);
-
-    const stream = new Readable();
-
-    const pdf = await pdfCreator.generatePDF();
+    const { Calculated_collection, Balance, Grand_total, Truck_number } = body,
+      manipulatedBody = {
+        ...body,
+        Calculated_collection,
+        Balance,
+        Grand_total,
+        Company_logo: VARL_LOGO_BASE64,
+        Custom_logo: CUSTOM_LOGO_BASE64,
+        Custom_heading: VARL_CUSTOM_HEADING,
+        Custom_signature: SIGNATURE_BASE64,
+      },
+      pdfCreator = new PDFCreator(manipulatedBody, MEMO_PDF),
+      stream = new Readable(),
+      pdf = await pdfCreator.generatePDF();
 
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader(
@@ -71,7 +51,6 @@ export class VijayController {
 
     stream.push(pdf);
     stream.push(null);
-
     stream.pipe(res);
   }
 
@@ -87,33 +66,17 @@ export class VijayController {
     @Res() res: Response,
     @Body() body: CreateSlipDto,
   ) {
-    const { Truck_number } = body;
-
-    const Company_logo = await readFile(VARL_LOGO_BASE64, {
-      encoding: 'utf-8',
-    });
-
-    const Custom_logo = await readFile(CUSTOM_LOGO_BASE64, {
-      encoding: 'utf-8',
-    });
-
-    const Custom_signature = await readFile(SIGNATURE_BASE64, {
-      encoding: 'utf-8',
-    });
-
-    const manipulatedBody = {
-      ...body,
-      Company_logo,
-      Custom_logo,
-      Custom_heading: VARL_CUSTOM_HEADING,
-      Custom_signature,
-    };
-
-    const pdfCreator = new PDFCreator(manipulatedBody, SLIP_PDF);
-
-    const stream = new Readable();
-
-    const pdf = await pdfCreator.generatePDF('190mm', '210mm');
+    const { Truck_number } = body,
+      manipulatedBody = {
+        ...body,
+        Company_logo: VARL_LOGO_BASE64,
+        Custom_logo: CUSTOM_LOGO_BASE64,
+        Custom_heading: VARL_CUSTOM_HEADING,
+        Custom_signature: SIGNATURE_BASE64,
+      },
+      pdfCreator = new PDFCreator(manipulatedBody, SLIP_PDF),
+      stream = new Readable(),
+      pdf = await pdfCreator.generatePDF('190mm', '210mm');
 
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader(
@@ -124,7 +87,6 @@ export class VijayController {
 
     stream.push(pdf);
     stream.push(null);
-
     stream.pipe(res);
   }
 }

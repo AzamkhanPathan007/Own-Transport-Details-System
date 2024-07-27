@@ -1,29 +1,25 @@
 import { Controller, Get, Render, Post, Req, Res, Body } from '@nestjs/common';
-import { OtsService } from './ots.service';
 import {
-  CUSTOMLOGOBASE64,
-  MEMOPDF,
-  OTSCUSTOMHEADING,
-  OTSLOGOBASE64,
-  RENDEREDOBJ,
-  SIGNATUREBASE64,
-  SLIPPDF,
+  CUSTOM_LOGO_BASE64,
+  MEMO_PDF,
+  OTS_CUSTOM_HEADING,
+  OTS_LOGO_BASE64,
+  RENDERED_OBJ,
+  SIGNATURE_BASE64,
+  SLIP_PDF,
 } from '@constants/constant_variables';
 import { CreateSlipDto } from '@commonDto/create_slip';
 import { CreateMemoDto } from '@commonDto/create_memo';
 import { Request, Response } from 'express';
 import { PDFCreator } from '@services/create_pdf';
 import { Readable } from 'stream';
-import { readFile } from 'fs/promises';
 
 @Controller('ots')
 export class OtsController {
-  constructor(private readonly otsService: OtsService) {}
-
   @Get('/memo')
   @Render('Own_memo')
   getOTSMemo() {
-    return RENDEREDOBJ;
+    return RENDERED_OBJ;
   }
 
   @Post('/memo')
@@ -32,32 +28,20 @@ export class OtsController {
     @Res() res: Response,
     @Body() body: CreateMemoDto,
   ) {
-    const { Calculated_collection, Balance, Grand_total, Truck_number } = body;
-
-    const Company_logo = await readFile(OTSLOGOBASE64, { encoding: 'utf-8' });
-
-    const Custom_logo = await readFile(CUSTOMLOGOBASE64, { encoding: 'utf-8' });
-
-    const Custom_signature = await readFile(SIGNATUREBASE64, {
-      encoding: 'utf-8',
-    });
-
-    const manipulatedBody = {
-      ...body,
-      Calculated_collection,
-      Balance,
-      Grand_total,
-      Company_logo,
-      Custom_logo,
-      Custom_heading: OTSCUSTOMHEADING,
-      Custom_signature,
-    };
-
-    const pdfCreator = new PDFCreator(manipulatedBody, MEMOPDF);
-
-    const stream = new Readable();
-
-    const pdf = await pdfCreator.generatePDF();
+    const { Calculated_collection, Balance, Grand_total, Truck_number } = body,
+      manipulatedBody = {
+        ...body,
+        Calculated_collection,
+        Balance,
+        Grand_total,
+        Company_logo: OTS_LOGO_BASE64,
+        Custom_logo: CUSTOM_LOGO_BASE64,
+        Custom_heading: OTS_CUSTOM_HEADING,
+        Custom_signature: SIGNATURE_BASE64,
+      },
+      pdfCreator = new PDFCreator(manipulatedBody, MEMO_PDF),
+      stream = new Readable(),
+      pdf = await pdfCreator.generatePDF();
 
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader(
@@ -68,14 +52,13 @@ export class OtsController {
 
     stream.push(pdf);
     stream.push(null);
-
     stream.pipe(res);
   }
 
   @Get('/slip')
   @Render('Own_slip')
   getOTSSlip() {
-    return RENDEREDOBJ;
+    return RENDERED_OBJ;
   }
 
   @Post('/slip')
@@ -84,29 +67,17 @@ export class OtsController {
     @Res() res: Response,
     @Body() body: CreateSlipDto,
   ) {
-    const { Truck_number } = body;
-
-    const Company_logo = await readFile(OTSLOGOBASE64, { encoding: 'utf-8' });
-
-    const Custom_logo = await readFile(CUSTOMLOGOBASE64, { encoding: 'utf-8' });
-
-    const Custom_signature = await readFile(SIGNATUREBASE64, {
-      encoding: 'utf-8',
-    });
-
-    const manipulatedBody = {
-      ...body,
-      Company_logo,
-      Custom_logo,
-      Custom_heading: OTSCUSTOMHEADING,
-      Custom_signature,
-    };
-
-    const pdfCreator = new PDFCreator(manipulatedBody, SLIPPDF);
-
-    const stream = new Readable();
-
-    const pdf = await pdfCreator.generatePDF('190mm', '210mm');
+    const { Truck_number } = body,
+      manipulatedBody = {
+        ...body,
+        Company_logo: OTS_LOGO_BASE64,
+        Custom_logo: CUSTOM_LOGO_BASE64,
+        Custom_heading: OTS_CUSTOM_HEADING,
+        Custom_signature: SIGNATURE_BASE64,
+      },
+      pdfCreator = new PDFCreator(manipulatedBody, SLIP_PDF),
+      stream = new Readable(),
+      pdf = await pdfCreator.generatePDF('190mm', '210mm');
 
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader(
@@ -117,7 +88,6 @@ export class OtsController {
 
     stream.push(pdf);
     stream.push(null);
-
     stream.pipe(res);
   }
 }

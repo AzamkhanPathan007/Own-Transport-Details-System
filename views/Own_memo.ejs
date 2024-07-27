@@ -1,73 +1,57 @@
 <!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OWN TRANSPORT MEMO SERVICE</title>
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="shortcut icon" href="/Transport-Truck.ico" type="image/x-icon" />
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OWN TRANSPORT MEMO SERVICE</title>
-  <link rel="stylesheet" href="/style.css" />
-  <link rel="shortcut icon" href="/Transport-Truck.ico" type="image/x-icon" />
+  <body onbeforeunload="cacheValue()" onload="populateCachedValue()">
+    <script>
+      function cacheValue() {
+        const form = document.getElementById('main'),
+          formData = new FormData(form).entries();
 
-</head>
-
-<body onbeforeunload="cacheValue()" onload="populateCachedValue()">
-  <script>
-    function cacheValue() {
-
-      const form = document.getElementById('main'), formData = new FormData(form).entries()
-      
-      for (const pair of formData) {
-        const [key, value] = pair
-        sessionStorage.setItem(key, value)
-        console.log(key, value);
-
-      }
-    }
-
-    function populateCachedValue() {
-      const form = document.getElementById('main');
-
-      for (const key in sessionStorage) {
-        const element = form.elements.namedItem(key);
-        if (element) {
-          element.value = sessionStorage.getItem(key);
+        for (const pair of formData) {
+          const [key, value] = pair;
+          sessionStorage.setItem(key, value);
+          console.log(key, value);
         }
       }
-    }
 
-    function clearCache() {
-      sessionStorage.clear()
+      function populateCachedValue() {
+        const form = document.getElementById('main');
 
-      const form = document.getElementById('main');
-
-      const formData = new FormData(form);
-      for (const pair of formData.entries()) {
-        const [key] = pair
-        const element = form.elements.namedItem(key);
-        element.value = ""
-
+        for (const key in sessionStorage) {
+          const element = form.elements.namedItem(key);
+          if (element) {
+            element.value = sessionStorage.getItem(key);
+          }
+        }
       }
-      
-    }
-  </script>
-  <nav id="navbar">
-    <ul id="navigation">
-      <li class="nav_items"><a href=<%=OTSMEMOURL %>>OTS MEMO</a></li>
-      <li class="nav_items"><a href=<%=OTSSLIPURL %>>OTS SLIP</a></li>
-      <li class="nav_items"><a href=<%=VIJAYANDRAMEMOURL %>>VARL MEMO</a></li>
-      <li class="nav_items"><a href=<%=VIJAYANDRASLIPURL%>>VARL SLIP</a></li>
-      </li>
-    </ul>
-  </nav>
 
-  <form id="main" method="post" action=<%=OTSMEMOURL %>>
-    <h2 id="heading">OWNER TRANSPORT MEMO GENERATOR</h2>
+      function clearCache() {
+        sessionStorage.clear();
 
-    <%- include ('common_memo') %>
+        const form = document.getElementById('main');
 
+        const formData = new FormData(form);
+        for (const pair of formData.entries()) {
+          const [key] = pair;
+          const element = form.elements.namedItem(key);
+          element.value = '';
+        }
+      }
+    </script>
+    <%- include('common_navigation') %>
 
-  </form>
-</body>
+    <form id="main" method="post" action="<%=OTS_MEMO_URL %>">
+      <h2 id="heading">OWNER TRANSPORT MEMO GENERATOR</h2>
 
+      <%- include ('common_memo') %>
+    </form>
+  </body>
 </html>
