@@ -1,17 +1,21 @@
 import { Controller, Get, Render, Post, Req, Res, Body } from '@nestjs/common';
 import {
-  CUSTOM_LOGO_BASE64,
+  CUSTOM_LOGO,
+  CUSTOM_SIGNATURE,
+  MEMO_HEIGHT,
   MEMO_PDF,
+  MEMO_WIDTH,
   RENDERED_OBJ,
-  SIGNATURE_BASE64,
+  SLIP_HEIGHT,
   SLIP_PDF,
+  SLIP_WIDTH,
+  VARL_COMPANY_LOGO,
   VARL_CUSTOM_HEADING,
-  VARL_LOGO_BASE64,
 } from '@constants/constant_variables';
 import { Request, Response } from 'express';
 import { CreateSlipDto } from '@commonDto/create_slip';
 import { CreateMemoDto } from '@commonDto/create_memo';
-import { PDFCreator } from '@services/create_pdf';
+import { PDFCreator } from '@services/create_pdf_enhanced';
 import { Readable } from 'node:stream';
 
 @Controller('vijay')
@@ -33,14 +37,13 @@ export class VijayController {
         Calculated_collection,
         Balance,
         Grand_total,
-        Company_logo: VARL_LOGO_BASE64,
-        Custom_logo: CUSTOM_LOGO_BASE64,
+        Company_logo: VARL_COMPANY_LOGO,
+        Custom_logo: CUSTOM_LOGO,
         Custom_heading: VARL_CUSTOM_HEADING,
-        Custom_signature: SIGNATURE_BASE64,
+        Custom_signature: CUSTOM_SIGNATURE,
       },
       pdfCreator = new PDFCreator(manipulatedBody, MEMO_PDF),
-      stream = new Readable(),
-      pdf = await pdfCreator.generatePDF();
+      pdf = await pdfCreator.generatePDF(MEMO_HEIGHT, MEMO_WIDTH);
 
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader(
@@ -49,9 +52,7 @@ export class VijayController {
     );
     res.setHeader('Content-Length', pdf.length);
 
-    stream.push(pdf);
-    stream.push(null);
-    stream.pipe(res);
+    res.status(200).send(pdf);
   }
 
   @Get('/slip')
@@ -69,14 +70,14 @@ export class VijayController {
     const { Truck_number } = body,
       manipulatedBody = {
         ...body,
-        Company_logo: VARL_LOGO_BASE64,
-        Custom_logo: CUSTOM_LOGO_BASE64,
+        Company_logo: VARL_COMPANY_LOGO,
+        Custom_logo: CUSTOM_LOGO,
         Custom_heading: VARL_CUSTOM_HEADING,
-        Custom_signature: SIGNATURE_BASE64,
+        Custom_signature: CUSTOM_SIGNATURE,
       },
       pdfCreator = new PDFCreator(manipulatedBody, SLIP_PDF),
       stream = new Readable(),
-      pdf = await pdfCreator.generatePDF('190mm', '210mm');
+      pdf = await pdfCreator.generatePDF(SLIP_HEIGHT, SLIP_WIDTH);
 
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader(

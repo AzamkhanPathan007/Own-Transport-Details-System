@@ -4,6 +4,7 @@
 /build
 /dist
 .env
+tsconfig.build.tsbuildinfo
 
 # Logs
 logs

@@ -1,17 +1,21 @@
 import { Controller, Get, Render, Post, Req, Res, Body } from '@nestjs/common';
 import {
-  CUSTOM_LOGO_BASE64,
+  OTS_COMPANY_LOGO,
+  CUSTOM_LOGO,
+  CUSTOM_SIGNATURE,
   MEMO_PDF,
   OTS_CUSTOM_HEADING,
-  OTS_LOGO_BASE64,
   RENDERED_OBJ,
-  SIGNATURE_BASE64,
   SLIP_PDF,
+  MEMO_WIDTH,
+  MEMO_HEIGHT,
+  SLIP_HEIGHT,
+  SLIP_WIDTH,
 } from '@constants/constant_variables';
 import { CreateSlipDto } from '@commonDto/create_slip';
 import { CreateMemoDto } from '@commonDto/create_memo';
 import { Request, Response } from 'express';
-import { PDFCreator } from '@services/create_pdf';
+import { PDFCreator } from '@services/create_pdf_enhanced';
 import { Readable } from 'stream';
 
 @Controller('ots')
@@ -34,14 +38,14 @@ export class OtsController {
         Calculated_collection,
         Balance,
         Grand_total,
-        Company_logo: OTS_LOGO_BASE64,
-        Custom_logo: CUSTOM_LOGO_BASE64,
+        Company_logo: OTS_COMPANY_LOGO,
+        Custom_logo: CUSTOM_LOGO,
         Custom_heading: OTS_CUSTOM_HEADING,
-        Custom_signature: SIGNATURE_BASE64,
+        Custom_signature: CUSTOM_SIGNATURE,
       },
       pdfCreator = new PDFCreator(manipulatedBody, MEMO_PDF),
       stream = new Readable(),
-      pdf = await pdfCreator.generatePDF();
+      pdf = await pdfCreator.generatePDF(MEMO_HEIGHT, MEMO_WIDTH);
 
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader(
@@ -70,14 +74,14 @@ export class OtsController {
     const { Truck_number } = body,
       manipulatedBody = {
         ...body,
-        Company_logo: OTS_LOGO_BASE64,
-        Custom_logo: CUSTOM_LOGO_BASE64,
+        Company_logo: OTS_COMPANY_LOGO,
+        Custom_logo: CUSTOM_LOGO,
         Custom_heading: OTS_CUSTOM_HEADING,
-        Custom_signature: SIGNATURE_BASE64,
+        Custom_signature: CUSTOM_SIGNATURE,
       },
       pdfCreator = new PDFCreator(manipulatedBody, SLIP_PDF),
       stream = new Readable(),
-      pdf = await pdfCreator.generatePDF('190mm', '210mm');
+      pdf = await pdfCreator.generatePDF(SLIP_HEIGHT, SLIP_WIDTH);
 
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader(
