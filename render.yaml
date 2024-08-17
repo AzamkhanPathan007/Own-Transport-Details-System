@@ -4,7 +4,7 @@ services:
     env: node
     plan: free
     region: singapore
-    repo: https://github.com/PATHANAZAMKHAN/Own-Transport-Details-System/tree/OTS_nest_v2
+    repo: https://github.com/PATHANAZAMKHAN/Own-Transport-Details-System.git
     branch: OTS_nest_v2
     buildCommand: npm install && npm run build
     startCommand: npm run start:prod
