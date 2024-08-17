@@ -1,10 +1,13 @@
 {
-  "name": "own_transport_details_system",
+  "name": "transport_pdf_service",
   "version": "2.0.0",
   "description": "A simple program to create pdf via a form that populated data into a word file and the convert it to pdf for download",
   "author": "PATHANAZAMKHAN",
   "private": true,
   "license": "UNLICENSED",
+  "engines": {
+    "node": ">=19.9.0 <=20.16.0"
+  },
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",

@@ -21,6 +21,9 @@ async function bootstrap() {
       whitelist: true,
     }),
   );
+  app.use('/health', (req, res) => {
+    return res.send('OK!');
+  });
   app.listen(PORT || 3000, () => {
     logger.log(`Server started on ${WEB_URL}/vijay/memo`);
   });

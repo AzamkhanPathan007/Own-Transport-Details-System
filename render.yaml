@@ -1,5 +1,5 @@
 services:
-  - name: own-transport-details-system
+  - name: Transport_pdf_service
     type: web
     env: node
     plan: free
@@ -8,7 +8,10 @@ services:
     branch: OTS_nest_v2
     buildCommand: npm install && npm run build
     startCommand: npm run start:prod
+    healthCheckPath: /health
     envVars:
       - key: WEB_URL
         value: https://transport-pdf-service.onrender.com
+      - key: NODE_VERSION
+        value: 20.16.0
     autoDeploy: false
