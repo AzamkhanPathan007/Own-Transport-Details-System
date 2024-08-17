@@ -1,5 +1,5 @@
-import { CreateMemoDto } from '@commonDto/create_memo';
-import { CreateSlipDto } from '@commonDto/create_slip';
+import { CreateMemoDto } from 'commonDto/createMemo';
+import { CreateSlipDto } from 'commonDto/createSlip';
 import { renderFile } from 'ejs';
 import { generatePdf } from 'html-pdf-node';
 import { promisify } from 'node:util';

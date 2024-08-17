@@ -27,9 +27,6 @@ export class CreateMemoDto {
     this.Weight_wage = 0;
     this.Guide_rupees = 0;
     this.Other_expenses = 0;
-    // this.Calculated_collection = 0;
-    // this.Balance = 0;
-    // this.Grand_total = 0;
   }
 
   @IsOptional()

@@ -7,45 +7,10 @@
     <title>OWN TRANSPORT MEMO SERVICE</title>
     <link rel="stylesheet" href="/style.css" />
     <link rel="shortcut icon" href="/Transport-Truck.ico" type="image/x-icon" />
+    <script type="module" src="/cachingScript.js"></script>
   </head>
 
-  <body onbeforeunload="cacheValue()" onload="populateCachedValue()">
-    <script>
-      function cacheValue() {
-        const form = document.getElementById('main'),
-          formData = new FormData(form).entries();
-
-        for (const pair of formData) {
-          const [key, value] = pair;
-          sessionStorage.setItem(key, value);
-          console.log(key, value);
-        }
-      }
-
-      function populateCachedValue() {
-        const form = document.getElementById('main');
-
-        for (const key in sessionStorage) {
-          const element = form.elements.namedItem(key);
-          if (element) {
-            element.value = sessionStorage.getItem(key);
-          }
-        }
-      }
-
-      function clearCache() {
-        sessionStorage.clear();
-
-        const form = document.getElementById('main');
-
-        const formData = new FormData(form);
-        for (const pair of formData.entries()) {
-          const [key] = pair;
-          const element = form.elements.namedItem(key);
-          element.value = '';
-        }
-      }
-    </script>
+  <body>
     <%- include('common_navigation') %>
 
     <form id="main" method="post" action="<%=OTS_MEMO_URL %>">

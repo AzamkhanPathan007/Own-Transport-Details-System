@@ -2,13 +2,12 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { join } from 'node:path';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import { ValidationPipe } from '@nestjs/common';
-// import { RedisConnector } from 'database/redisConnector';
+import { Logger, ValidationPipe } from '@nestjs/common';
+import { PORT, WEB_URL } from 'envConfig';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
-  //   redisInstance = RedisConnector.getInstance();
-  // redisInstance.connect();
+  const logger = new Logger(bootstrap.name);
   app.useStaticAssets(join('public'));
   app.setBaseViewsDir(join('views'));
   app.setViewEngine('ejs');
@@ -22,8 +21,8 @@ async function bootstrap() {
       whitelist: true,
     }),
   );
-  app.listen(3000, () => {
-    console.log('Server started on http://localhost:3000/vijay/memo');
+  app.listen(PORT || 3000, () => {
+    logger.log(`Server started on ${WEB_URL}/vijay/memo`);
   });
 }
 

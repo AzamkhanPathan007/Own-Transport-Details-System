@@ -4,7 +4,9 @@
 /build
 /dist
 .env
+.env.*
 tsconfig.build.tsbuildinfo
+package-lock.json
 
 # Logs
 logs

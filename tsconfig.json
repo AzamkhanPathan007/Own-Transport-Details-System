@@ -16,7 +16,8 @@
       "@constants/*": ["constants/*"],
       "@ots/*": ["ots/*"],
       "@services/*": ["services/*"],
-      "@vijay/*": ["vijay/*"]
+      "@vijay/*": ["vijay/*"],
+      "@utils/*": ["utils/*"]
     },
     "incremental": true,
     "skipLibCheck": true,

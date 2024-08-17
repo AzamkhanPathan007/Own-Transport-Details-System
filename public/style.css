@@ -78,7 +78,7 @@ body {
 }
 
 #generate_btn,
-input::file-selector-button {
+#reset_btn {
   padding: 0.5rem;
   font-weight: bold;
   background-color: blue;
@@ -86,6 +86,10 @@ input::file-selector-button {
   border-radius: 1rem;
   color: white;
   cursor: pointer;
+}
+
+#reset_btn {
+  background-color: red;
 }
 
 input[type='text'],
@@ -98,8 +102,15 @@ textarea {
 #generate_btn {
   position: absolute;
   bottom: 0.5rem;
-  right: 35%;
-  left: 35%;
+  right: 55%;
+  left: 20%;
+}
+
+#reset_btn {
+  position: absolute;
+  bottom: 0.5rem;
+  right: 20%;
+  left: 55%;
 }
 
 /* This will shrink it to 2 columns */
@@ -110,13 +121,20 @@ textarea {
 
   #generate_btn {
     bottom: 1rem;
-    right: 25%;
-    left: 25%;
+    right: 52%;
+    left: 10%;
+  }
+
+  #reset_btn {
+    bottom: 1rem;
+    right: 10%;
+    left: 52%;
   }
 }
 
 @media screen and (max-height: 680px) {
-  #generate_btn {
+  #generate_btn,
+  #reset_btn {
     bottom: 0.2rem;
   }
 }
@@ -129,8 +147,14 @@ textarea {
 
   #generate_btn {
     bottom: 0.4rem;
-    right: 15%;
-    left: 15%;
+    right: 41%;
+    left: 5%;
+  }
+
+  #reset_btn {
+    bottom: 0.4rem;
+    right: 5%;
+    left: 62%;
   }
 }
 

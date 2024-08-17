@@ -1,8 +1,5 @@
 import { Controller, Get, Render, Post, Req, Res, Body } from '@nestjs/common';
 import {
-  OTS_COMPANY_LOGO,
-  CUSTOM_LOGO,
-  CUSTOM_SIGNATURE,
   MEMO_PDF,
   OTS_CUSTOM_HEADING,
   RENDERED_OBJ,
@@ -11,15 +8,17 @@ import {
   MEMO_HEIGHT,
   SLIP_HEIGHT,
   SLIP_WIDTH,
-} from '@constants/constant_variables';
-import { CreateSlipDto } from '@commonDto/create_slip';
-import { CreateMemoDto } from '@commonDto/create_memo';
+} from '@constants/constantVariables';
+import { CreateSlipDto } from 'commonDto/createSlip';
+import { CreateMemoDto } from 'commonDto/createMemo';
 import { Request, Response } from 'express';
-import { PDFCreator } from '@services/create_pdf_enhanced';
-import { Readable } from 'stream';
+import { PDFCreator } from '@services/createPdfEnhanced';
+import { CachedLogoService } from '@utils/cachedLogo.service';
 
 @Controller('ots')
 export class OtsController {
+  constructor(private readonly cachedLogoService: CachedLogoService) {}
+
   @Get('/memo')
   @Render('Own_memo')
   getOTSMemo() {
@@ -32,19 +31,26 @@ export class OtsController {
     @Res() res: Response,
     @Body() body: CreateMemoDto,
   ) {
-    const { Calculated_collection, Balance, Grand_total, Truck_number } = body,
-      manipulatedBody = {
+    const { Calculated_collection, Balance, Grand_total, Truck_number } = body;
+
+    const [{ Company_logo }, { Custom_logo }, { Custom_signature }] =
+      await Promise.all([
+        this.cachedLogoService.getOTSCompanyLogo(),
+        this.cachedLogoService.getCustomLogo(),
+        this.cachedLogoService.getSignature(),
+      ]);
+
+    const manipulatedBody = {
         ...body,
         Calculated_collection,
         Balance,
         Grand_total,
-        Company_logo: OTS_COMPANY_LOGO,
-        Custom_logo: CUSTOM_LOGO,
+        Company_logo,
+        Custom_logo,
         Custom_heading: OTS_CUSTOM_HEADING,
-        Custom_signature: CUSTOM_SIGNATURE,
+        Custom_signature,
       },
       pdfCreator = new PDFCreator(manipulatedBody, MEMO_PDF),
-      stream = new Readable(),
       pdf = await pdfCreator.generatePDF(MEMO_HEIGHT, MEMO_WIDTH);
 
     res.setHeader('Content-Type', 'application/pdf');
@@ -54,9 +60,7 @@ export class OtsController {
     );
     res.setHeader('Content-Length', pdf.length);
 
-    stream.push(pdf);
-    stream.push(null);
-    stream.pipe(res);
+    return res.status(200).send(pdf);
   }
 
   @Get('/slip')
@@ -71,16 +75,23 @@ export class OtsController {
     @Res() res: Response,
     @Body() body: CreateSlipDto,
   ) {
-    const { Truck_number } = body,
-      manipulatedBody = {
+    const { Truck_number } = body;
+
+    const [{ Company_logo }, { Custom_logo }, { Custom_signature }] =
+      await Promise.all([
+        this.cachedLogoService.getOTSCompanyLogo(),
+        this.cachedLogoService.getCustomLogo(),
+        this.cachedLogoService.getSignature(),
+      ]);
+
+    const manipulatedBody = {
         ...body,
-        Company_logo: OTS_COMPANY_LOGO,
-        Custom_logo: CUSTOM_LOGO,
+        Company_logo,
+        Custom_logo,
         Custom_heading: OTS_CUSTOM_HEADING,
-        Custom_signature: CUSTOM_SIGNATURE,
+        Custom_signature,
       },
       pdfCreator = new PDFCreator(manipulatedBody, SLIP_PDF),
-      stream = new Readable(),
       pdf = await pdfCreator.generatePDF(SLIP_HEIGHT, SLIP_WIDTH);
 
     res.setHeader('Content-Type', 'application/pdf');
@@ -90,8 +101,6 @@ export class OtsController {
     );
     res.setHeader('Content-Length', pdf.length);
 
-    stream.push(pdf);
-    stream.push(null);
-    stream.pipe(res);
+    return res.status(200).send(pdf);
   }
 }

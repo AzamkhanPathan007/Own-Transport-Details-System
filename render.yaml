@@ -1,0 +1,16 @@
+services:
+  - name: own-transport-details-system
+    type: web
+    env: node
+    plan: free
+    region: singapore
+    buildCommand: npm install && npm run build
+    startCommand: npm run start:prod
+    envVars:
+      - key: WEB_URL
+        value: https://transport-pdf-service.onrender.com
+    autoDeploy: true
+    branches:
+      only:
+        - OTS_nest_v2
+    staticPublishPath: public
