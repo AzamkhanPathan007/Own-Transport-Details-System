@@ -1,4 +1,13 @@
 {
   "singleQuote": true,
-  "trailingComma": "all"
+  "trailingComma": "all",
+  "plugins": ["@prettier/plugin-xml"],
+  "overrides": [
+    {
+      "files": "*.ejs",
+      "options": {
+        "parser": "html"
+      }
+    }
+  ]
 }

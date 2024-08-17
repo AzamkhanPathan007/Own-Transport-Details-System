@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { VijayService } from './vijay.service';
-import { VijayController } from './vijay.controller';
+import { VijayService } from '@vijay/vijay.service';
+import { VijayController } from '@vijay/vijay.controller';
 
 @Module({
   controllers: [VijayController],

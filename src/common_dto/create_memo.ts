@@ -1,5 +1,5 @@
-import { Transform, Type } from 'class-transformer';
-import { IsOptional, IsString, IsInt } from 'class-validator';
+import { Transform } from 'class-transformer';
+import { IsOptional, IsString, IsNumber } from 'class-validator';
 
 export class CreateMemoDto {
   constructor() {
@@ -32,120 +32,108 @@ export class CreateMemoDto {
     // this.Grand_total = 0;
   }
 
-  @Type(() => Number)
-  @IsInt()
   @IsOptional()
+  @IsNumber()
   Memo_number: number;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   Truck_number: string;
 
+  @IsOptional()
   @Transform(({ value }) =>
     value
       ? new Date(value).toLocaleDateString('en-GB')
       : new Date().toLocaleDateString('en-GB'),
   )
-  @IsOptional()
   Inserted_date: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   Pickup_location: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   Owner_address: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   Owner_name: string;
 
-  @Type(() => Number)
-  @IsInt()
   @IsOptional()
+  @IsNumber()
   Owner_number: number;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   Driver_name: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   Drop_location: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   Consignor: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   Consignee: string;
 
   @IsString()
   @IsOptional()
   Particulars: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   Weight: string;
 
-  @Type(() => Number)
-  @IsInt()
   @IsOptional()
+  @IsNumber()
   Total_collection: number;
 
-  @Type(() => Number)
-  @IsInt()
   @IsOptional()
+  @IsNumber()
   Height_freight: number;
 
-  @Type(() => Number)
-  @IsInt()
   @IsOptional()
+  @IsNumber()
   Height_charge: number;
 
-  @Type(() => Number)
-  @IsInt()
   @IsOptional()
+  @IsNumber()
   Workout: number;
 
-  @Type(() => Number)
-  @IsInt()
   @IsOptional()
+  @IsNumber()
   Advance: number;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   Payment_location: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   Remarks: string;
 
-  @Type(() => Number)
-  @IsInt()
   @IsOptional()
+  @IsNumber()
   Commission: number;
 
-  @Type(() => Number)
-  @IsInt()
   @IsOptional()
+  @IsNumber()
   Tapal: number;
 
-  @Type(() => Number)
-  @IsInt()
   @IsOptional()
+  @IsNumber()
   Weight_wage: number;
 
-  @Type(() => Number)
-  @IsInt()
   @IsOptional()
+  @IsNumber()
   Guide_rupees: number;
 
-  @Type(() => Number)
-  @IsInt()
   @IsOptional()
+  @IsNumber()
   Other_expenses: number;
 
   //!these 3 fields are calculated and are not taken as input

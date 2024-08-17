@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { OtsService } from './ots.service';
-import { OtsController } from './ots.controller';
+import { OtsService } from '@ots/ots.service';
+import { OtsController } from '@ots/ots.controller';
 
 @Module({
   controllers: [OtsController],

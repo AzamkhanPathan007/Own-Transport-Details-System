@@ -1,5 +1,5 @@
-import { IsOptional, IsString, IsInt } from 'class-validator';
-import { Transform, Type } from 'class-transformer';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { Transform } from 'class-transformer';
 
 export class CreateSlipDto {
   constructor() {
@@ -16,56 +16,55 @@ export class CreateSlipDto {
     this.Unloading_point = '';
   }
 
+  @IsOptional()
   @Transform(({ value }) =>
     value
       ? new Date(value).toLocaleDateString('en-GB')
       : new Date().toLocaleDateString('en-GB'),
   )
-  @IsOptional()
   Date: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   Sir_name: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   Party_name: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   Truck_number: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   Drop_location: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   Pickup_location: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   Fixed_rate: string;
 
-  @Type(() => Number)
-  @IsInt()
   @IsOptional()
+  @IsNumber()
   Advance_wage: number;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   Load: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   Payment_location: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   Remarks: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   Unloading_point: string;
 }
