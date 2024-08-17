@@ -12,4 +12,3 @@ services:
       - key: WEB_URL
         value: https://transport-pdf-service.onrender.com
     autoDeploy: false
-    staticPublishPath: public
