@@ -1,41 +1,66 @@
-import { Controller, Get, Render } from '@nestjs/common';
+import { Body, Controller, Get, Post, Render, Res } from '@nestjs/common';
 import { SlipService } from './slip.service';
-import { ConfigService } from '@nestjs/config';
+import { RenderService } from 'src/providers/render.service';
+import { CreateSlipDto } from './dto/createSlip.dto';
+import { CUSTOM_HEADINGS, LOGO_PATHS } from 'src/constants/common.contants';
+import { Response } from 'express';
 
 @Controller('slip')
 export class SlipController {
   constructor(
     private readonly slipService: SlipService,
-    private readonly configService: ConfigService,
+    private readonly renderService: RenderService,
   ) {}
 
   @Get('/ots')
   @Render('OTSSlip')
   getOTSSlip() {
-    const WEB_URL = this.configService.getOrThrow<string>('WEB_URL');
-
-    const RENDERED_OBJ = {
-      OTS_MEMO_URL: WEB_URL + '/memo/ots',
-      OTS_SLIP_URL: WEB_URL + '/slip/ots',
-      VIJAY_ANDRA_MEMO_URL: WEB_URL + '/memo/vijay',
-      VIJAY_ANDRA_SLIP_URL: WEB_URL + '/slip/vijay',
-    };
-
-    return RENDERED_OBJ;
+    return this.renderService.getRenderObject();
   }
 
   @Get('/vijay')
   @Render('vijaySlip')
   getVijaySlip() {
-    const WEB_URL = this.configService.getOrThrow<string>('WEB_URL');
+    return this.renderService.getRenderObject();
+  }
 
-    const RENDERED_OBJ = {
-      OTS_MEMO_URL: WEB_URL + '/memo/ots',
-      OTS_SLIP_URL: WEB_URL + '/slip/ots',
-      VIJAY_ANDRA_MEMO_URL: WEB_URL + '/memo/vijay',
-      VIJAY_ANDRA_SLIP_URL: WEB_URL + '/slip/vijay',
-    };
+  @Post('/ots')
+  async createOTSSlip(@Res() res: Response, @Body() body: CreateSlipDto) {
+    const { Truck_number } = body;
 
-    return RENDERED_OBJ;
+    const pdfBuffer = await this.slipService.createSlip(
+      body,
+      LOGO_PATHS.OTS_COMPANY_LOGO,
+      CUSTOM_HEADINGS.OTS_CUSTOM_HEADING,
+    );
+
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader(
+      'Content-Disposition',
+      `attachment; filename=${!Truck_number ? 'OTS_slip' : Truck_number}.pdf`,
+    );
+    res.setHeader('Content-Length', pdfBuffer.length);
+
+    return res.status(200).send(pdfBuffer);
+  }
+
+  @Post('/vijay')
+  async createVijaySlip(@Res() res: Response, @Body() body: CreateSlipDto) {
+    const { Truck_number } = body;
+
+    const pdfBuffer = await this.slipService.createSlip(
+      body,
+      LOGO_PATHS.VARL_COMPANY_LOGO,
+      CUSTOM_HEADINGS.VARL_CUSTOM_HEADING,
+    );
+
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader(
+      'Content-Disposition',
+      `attachment; filename=${!Truck_number ? 'vijay_slip' : Truck_number}.pdf`,
+    );
+    res.setHeader('Content-Length', pdfBuffer.length);
+
+    return res.status(200).send(pdfBuffer);
   }
 }
