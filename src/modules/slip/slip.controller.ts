@@ -2,18 +2,20 @@ import { Body, Controller, Get, Post, Render, Res } from '@nestjs/common';
 import { SlipService } from './slip.service';
 import { RenderService } from 'src/providers/render.service';
 import { CreateSlipDto } from './dto/createSlip.dto';
-import { CUSTOM_HEADINGS, LOGO_PATHS } from 'src/constants/common.contants';
+import { CUSTOM_HEADINGS } from 'src/constants/common.contants';
 import { Response } from 'express';
+import { FetchCachedLogoService } from 'src/providers/fetchCachedLogo.service';
 
 @Controller('slip')
 export class SlipController {
   constructor(
     private readonly slipService: SlipService,
     private readonly renderService: RenderService,
+    private readonly fetchCachedLogoService: FetchCachedLogoService,
   ) {}
 
   @Get('/ots')
-  @Render('OTSSlip')
+  @Render('otsSlip')
   getOTSSlip() {
     return this.renderService.getRenderObject();
   }
@@ -28,10 +30,13 @@ export class SlipController {
   async createOTSSlip(@Res() res: Response, @Body() body: CreateSlipDto) {
     const { Truck_number } = body;
 
+    const { Company_logo } =
+      await this.fetchCachedLogoService.getOTSCompanyLogo();
+
     const pdfBuffer = await this.slipService.createSlip(
       body,
-      LOGO_PATHS.OTS_COMPANY_LOGO,
       CUSTOM_HEADINGS.OTS_CUSTOM_HEADING,
+      Company_logo,
     );
 
     res.setHeader('Content-Type', 'application/pdf');
@@ -41,17 +46,20 @@ export class SlipController {
     );
     res.setHeader('Content-Length', pdfBuffer.length);
 
-    return res.status(200).send(pdfBuffer);
+    return res.status(200).end(pdfBuffer);
   }
 
   @Post('/vijay')
   async createVijaySlip(@Res() res: Response, @Body() body: CreateSlipDto) {
     const { Truck_number } = body;
 
+    const { Company_logo } =
+      await this.fetchCachedLogoService.getVARLCompanyLogo();
+
     const pdfBuffer = await this.slipService.createSlip(
       body,
-      LOGO_PATHS.VARL_COMPANY_LOGO,
       CUSTOM_HEADINGS.VARL_CUSTOM_HEADING,
+      Company_logo,
     );
 
     res.setHeader('Content-Type', 'application/pdf');
@@ -59,8 +67,8 @@ export class SlipController {
       'Content-Disposition',
       `attachment; filename=${!Truck_number ? 'vijay_slip' : Truck_number}.pdf`,
     );
-    res.setHeader('Content-Length', pdfBuffer.length);
+    res.setHeader('Content-Length', pdfBuffer.length.toString());
 
-    return res.status(200).send(pdfBuffer);
+    return res.status(200).end(pdfBuffer);
   }
 }

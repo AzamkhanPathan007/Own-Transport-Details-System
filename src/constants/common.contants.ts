@@ -1,10 +1,10 @@
 import { join } from 'node:path';
 
 export const LOGO_PATHS = {
-  OTS_COMPANY_LOGO: '/OTSLogo.txt',
-  VARL_COMPANY_LOGO: '/VarlLogo.txt',
-  CUSTOM_LOGO: '/CustomLogo.txt',
-  CUSTOM_SIGNATURE: '/Signature.txt',
+  OTS_COMPANY_LOGO: '/base64/otsLogo.txt',
+  VARL_COMPANY_LOGO: '/base64/varlLogo.txt',
+  CUSTOM_LOGO: '/base64/customLogo.txt',
+  CUSTOM_SIGNATURE: '/base64/customSignature.txt',
 } as const;
 
 export const CUSTOM_HEADINGS = {
@@ -20,6 +20,13 @@ export const PREDEFINED_DIMENSIONS = {
 } as const;
 
 export const FILE_PATHS = {
-  MEMO_PDF: join('views/memo_pdf.ejs'),
-  SLIP_PDF: join('views/slip_pdf.ejs'),
+  MEMO_PDF: join('views/pdfTemplate/memoPdf.ejs'),
+  SLIP_PDF: join('views/pdfTemplate/slipPdf.ejs'),
+} as const;
+
+export const CACHE_KEYS = {
+  VARL_COMPANY_LOGO: 'VARL_COMPANY_LOGO',
+  OTS_COMPANY_LOGO: 'OTS_COMPANY_LOGO',
+  CUSTOM_LOGO: 'CUSTOM_LOGO',
+  CUSTOM_SIGNATURE: 'CUSTOM_SIGNATURE',
 } as const;

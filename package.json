@@ -1,6 +1,6 @@
 {
   "name": "transport_pdf_generator",
-  "version": "0.0.1",
+  "version": "3.0.0",
   "description": "",
   "author": "",
   "private": true,
@@ -20,12 +20,13 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@nestjs/cache-manager": "^3.0.0",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.0",
     "@nestjs/core": "^11.0.1",
     "@nestjs/mapped-types": "*",
     "@nestjs/platform-express": "^11.0.1",
-    "@types/ejs": "^3.1.5",
+    "cache-manager": "^6.4.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "ejs": "^3.1.10",
@@ -41,6 +42,8 @@
     "@nestjs/testing": "^11.0.1",
     "@swc/cli": "^0.6.0",
     "@swc/core": "^1.10.16",
+    "@swc/jest": "^0.2.37",
+    "@types/ejs": "^3.1.5",
     "@types/express": "^5.0.0",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.10.7",
@@ -69,7 +72,7 @@
     "rootDir": "src",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
-      "^.+\\.(t|j)s$": "ts-jest"
+      "^.+\\.(t|j)s$": ["@swc/jest"]
     },
     "collectCoverageFrom": [
       "**/*.(t|j)s"

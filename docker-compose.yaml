@@ -1,0 +1,8 @@
+name: "transport_pdf_generator"
+
+services:
+  transport_app:
+    build: ./
+    container_name: transportApp
+    ports:
+      - 3000:3000

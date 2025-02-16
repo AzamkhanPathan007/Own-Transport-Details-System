@@ -10,6 +10,13 @@ export class PDFGeneratorService {
 
     await page.setContent(content, { waitUntil: 'networkidle0' });
 
-    return await page.pdf({ height, width });
+    const pdfBuffer = await page.pdf({
+      height,
+      width,
+    });
+
+    await browser.close();
+
+    return pdfBuffer;
   }
 }
