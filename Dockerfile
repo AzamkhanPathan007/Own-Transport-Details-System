@@ -16,9 +16,11 @@ FROM node:22.14.0-alpine AS app
 
 WORKDIR /app
 
+RUN apk add --no-cache chromium
+
 COPY --from=builder app/public public
 COPY --from=builder app/views views
-COPY --from=builder app/.env .
+COPY --from=builder app/.env.prod .env
 COPY --from=builder app/package*.json .
 COPY --from=builder app/dist dist
 COPY --from=builder app/node_modules node_modules

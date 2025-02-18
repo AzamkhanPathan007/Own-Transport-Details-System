@@ -4,6 +4,7 @@ import { MemoController } from './memo.controller';
 import { RenderService } from 'src/providers/render.service';
 import { PDFGeneratorService } from 'src/providers/generatePdf.service';
 import { FetchCachedLogoService } from 'src/providers/fetchCachedLogo.service';
+import { HelperMethodService } from 'src/providers/helperMethods.service';
 
 @Module({
   controllers: [MemoController],
@@ -12,6 +13,7 @@ import { FetchCachedLogoService } from 'src/providers/fetchCachedLogo.service';
     RenderService,
     PDFGeneratorService,
     FetchCachedLogoService,
+    HelperMethodService,
   ],
 })
 export class MemoModule {}

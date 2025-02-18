@@ -2,10 +2,6 @@ import { Transform } from 'class-transformer';
 import { IsOptional, IsString, IsNumber } from 'class-validator';
 
 export class CreateMemoDto {
-  private Calculated_collection: number;
-  private Balance: number;
-  private Grand_total: number;
-
   @IsOptional()
   @IsNumber()
   Memo_number: number = Math.floor(Math.random() * 10000);
@@ -105,18 +101,4 @@ export class CreateMemoDto {
   @IsOptional()
   @IsNumber()
   Other_expenses: number = 0;
-
-  setCalculatedValues() {
-    this.Calculated_collection =
-      this.Height_charge + this.Height_freight + this.Total_collection;
-
-    this.Balance = this.Calculated_collection - this.Advance;
-
-    this.Grand_total =
-      this.Commission +
-      this.Tapal +
-      this.Weight_wage +
-      this.Guide_rupees +
-      this.Other_expenses;
-  }
 }

@@ -2,7 +2,7 @@ import { Body, Controller, Get, Post, Render, Res } from '@nestjs/common';
 import { SlipService } from './slip.service';
 import { RenderService } from 'src/providers/render.service';
 import { CreateSlipDto } from './dto/createSlip.dto';
-import { CUSTOM_HEADINGS } from 'src/constants/common.contants';
+import { CUSTOM_HEADINGS } from 'src/constants/common.constants';
 import { Response } from 'express';
 import { FetchCachedLogoService } from 'src/providers/fetchCachedLogo.service';
 
@@ -33,7 +33,7 @@ export class SlipController {
     const { Company_logo } =
       await this.fetchCachedLogoService.getOTSCompanyLogo();
 
-    const pdfBuffer = await this.slipService.createSlip(
+    const pdfStream = await this.slipService.createSlip(
       body,
       CUSTOM_HEADINGS.OTS_CUSTOM_HEADING,
       Company_logo,
@@ -44,9 +44,8 @@ export class SlipController {
       'Content-Disposition',
       `attachment; filename=${!Truck_number ? 'OTS_slip' : Truck_number}.pdf`,
     );
-    res.setHeader('Content-Length', pdfBuffer.length);
 
-    return res.status(200).end(pdfBuffer);
+    return pdfStream.pipe(res);
   }
 
   @Post('/vijay')
@@ -56,7 +55,7 @@ export class SlipController {
     const { Company_logo } =
       await this.fetchCachedLogoService.getVARLCompanyLogo();
 
-    const pdfBuffer = await this.slipService.createSlip(
+    const pdfStream = await this.slipService.createSlip(
       body,
       CUSTOM_HEADINGS.VARL_CUSTOM_HEADING,
       Company_logo,
@@ -67,8 +66,7 @@ export class SlipController {
       'Content-Disposition',
       `attachment; filename=${!Truck_number ? 'vijay_slip' : Truck_number}.pdf`,
     );
-    res.setHeader('Content-Length', pdfBuffer.length.toString());
 
-    return res.status(200).end(pdfBuffer);
+    return pdfStream.pipe(res);
   }
 }

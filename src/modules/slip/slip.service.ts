@@ -3,7 +3,7 @@ import { Data, renderFile } from 'ejs';
 import {
   FILE_PATHS,
   PREDEFINED_DIMENSIONS,
-} from 'src/constants/common.contants';
+} from 'src/constants/common.constants';
 import { PDFGeneratorService } from 'src/providers/generatePdf.service';
 import { CreateSlipDto } from './dto/createSlip.dto';
 import { FetchCachedLogoService } from 'src/providers/fetchCachedLogo.service';

@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post, Render, Res } from '@nestjs/common';
 import { MemoService } from './memo.service';
 import { RenderService } from 'src/providers/render.service';
-import { CUSTOM_HEADINGS } from 'src/constants/common.contants';
+import { CUSTOM_HEADINGS } from 'src/constants/common.constants';
 import { CreateMemoDto } from './dto/createMemo.dto';
 import { Response } from 'express';
 import { FetchCachedLogoService } from 'src/providers/fetchCachedLogo.service';
@@ -33,7 +33,7 @@ export class MemoController {
     const { Company_logo } =
       await this.fetchCachedLogoService.getVARLCompanyLogo();
 
-    const pdfBuffer = await this.memoService.createMemo(
+    const pdfStream = await this.memoService.createMemo(
       body,
       CUSTOM_HEADINGS.VARL_CUSTOM_HEADING,
       Company_logo,
@@ -44,9 +44,8 @@ export class MemoController {
       'Content-Disposition',
       `attachment; filename=${!Truck_number ? 'vijay_memo' : Truck_number}.pdf`,
     );
-    res.setHeader('Content-Length', pdfBuffer.length);
 
-    return res.status(200).end(pdfBuffer);
+    return pdfStream.pipe(res);
   }
 
   @Post('/ots')
@@ -56,7 +55,7 @@ export class MemoController {
     const { Company_logo } =
       await this.fetchCachedLogoService.getOTSCompanyLogo();
 
-    const pdfBuffer = await this.memoService.createMemo(
+    const pdfStream = await this.memoService.createMemo(
       body,
       CUSTOM_HEADINGS.OTS_CUSTOM_HEADING,
       Company_logo,
@@ -67,8 +66,7 @@ export class MemoController {
       'Content-Disposition',
       `attachment; filename=${!Truck_number ? 'OTS_memo' : Truck_number}.pdf`,
     );
-    res.setHeader('Content-Length', pdfBuffer.length);
 
-    return res.status(200).end(pdfBuffer);
+    return pdfStream.pipe(res);
   }
 }

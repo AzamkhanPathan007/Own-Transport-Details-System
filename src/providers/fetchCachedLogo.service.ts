@@ -1,7 +1,7 @@
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Inject, Injectable } from '@nestjs/common';
 import { Cache } from 'cache-manager';
-import { CACHE_KEYS } from 'src/constants/common.contants';
+import { CACHE_KEYS } from 'src/constants/common.constants';
 
 @Injectable()
 export class FetchCachedLogoService {

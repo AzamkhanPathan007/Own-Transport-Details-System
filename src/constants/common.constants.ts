@@ -30,3 +30,15 @@ export const CACHE_KEYS = {
   CUSTOM_LOGO: 'CUSTOM_LOGO',
   CUSTOM_SIGNATURE: 'CUSTOM_SIGNATURE',
 } as const;
+
+export const NODE_ENVIRONMENT = {
+  LOCAL: 'local',
+  PRODUCTION: 'production',
+} as const;
+
+export const PUPPETEER_ARGS = [
+  '--no-sandbox',
+  '--headless',
+  '--disable-gpu',
+  '--disable-dev-shm-usage',
+];
