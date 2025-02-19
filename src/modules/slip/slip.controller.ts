@@ -42,7 +42,7 @@ export class SlipController {
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader(
       'Content-Disposition',
-      `attachment; filename=${!Truck_number ? 'OTS_slip' : Truck_number}.pdf`,
+      `attachment; filename=${!Truck_number ? 'otsSlip' : Truck_number}.pdf`,
     );
 
     return pdfStream.pipe(res);
@@ -64,7 +64,7 @@ export class SlipController {
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader(
       'Content-Disposition',
-      `attachment; filename=${!Truck_number ? 'vijay_slip' : Truck_number}.pdf`,
+      `attachment; filename=${!Truck_number ? 'vijaySlip' : Truck_number}.pdf`,
     );
 
     return pdfStream.pipe(res);

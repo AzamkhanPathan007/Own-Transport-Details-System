@@ -3,8 +3,13 @@ import { Transform } from 'class-transformer';
 
 export class CreateSlipDto {
   @IsOptional()
-  @Transform(({ value }) => new Date(value).toLocaleDateString('en-GB'))
-  Date: string = new Date().toLocaleDateString('en-GB');
+  @Transform(({ value }) => {
+    const date = new Date(value);
+    return isNaN(date.getTime())
+      ? new Date().toLocaleDateString('en-GB')
+      : date.toLocaleDateString('en-GB');
+  })
+  Date: string;
 
   @IsOptional()
   @IsString()

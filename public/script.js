@@ -9,6 +9,16 @@ function cacheValue() {
   return;
 }
 
+function toggleMenu() {
+  const nav = document.querySelector('.nav-links');
+  const button = document.querySelector('.menu-toggle');
+
+  const isExpanded = button.getAttribute('aria-expanded') === 'true';
+  button.setAttribute('aria-expanded', !isExpanded);
+
+  nav.classList.toggle('active');
+}
+
 function populateCachedValue() {
   const form = document.getElementById('main');
 
@@ -35,3 +45,4 @@ function clearCache() {
 window.addEventListener('load', populateCachedValue);
 window.addEventListener('beforeunload', cacheValue);
 document.getElementById('reset_btn').addEventListener('click', clearCache);
+document.getElementById('hamburger').addEventListener('click', toggleMenu);

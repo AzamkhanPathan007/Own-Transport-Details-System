@@ -11,8 +11,14 @@ export class CreateMemoDto {
   Truck_number: string = '';
 
   @IsOptional()
-  @Transform(({ value }) => new Date(value).toLocaleDateString('en-GB'))
-  Inserted_date: string = new Date().toLocaleDateString('en-GB');
+  @IsString()
+  @Transform(({ value }) => {
+    const date = new Date(value);
+    return isNaN(date.getTime())
+      ? new Date().toLocaleDateString('en-GB')
+      : date.toLocaleDateString('en-GB');
+  })
+  Inserted_date: string;
 
   @IsOptional()
   @IsString()

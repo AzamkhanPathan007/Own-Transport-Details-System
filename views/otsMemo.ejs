@@ -1,22 +1,6 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>OWN TRANSPORT MEMO SERVICE</title>
-    <link rel="stylesheet" href="/style.css" />
-    <link rel="shortcut icon" href="/transportTruck.ico" type="image/x-icon" />
-    <script type="module" src="/cachingScript.js"></script>
-  </head>
-
-  <body>
-    <%- include('commonTemplate/commonNavigation') %>
-
-    <form id="main" method="post" action="<%=OTS_MEMO_URL %>">
-      <h2 id="heading">OWNER TRANSPORT MEMO GENERATOR</h2>
-
-      <%- include ('commonTemplate/commonMemo') %>
-    </form>
-  </body>
-</html>
+<%- include('commonTemplate/commonMemoLayout', { 
+    title: 'OWN TRANSPORT MEMO SERVICE', 
+    formAction: OTS_MEMO_URL, 
+    heading: 'OWNER TRANSPORT MEMO GENERATOR' 
+  }) %>
+  

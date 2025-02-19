@@ -1,12 +1,31 @@
 <nav>
-  <ul id="navigation">
-    <li class="nav_items"><a href="<%= OTS_MEMO_URL %>">OTS MEMO</a></li>
-    <li class="nav_items"><a href="<%= OTS_SLIP_URL %>">OTS SLIP</a></li>
-    <li class="nav_items">
-      <a href="<%= VIJAY_ANDRA_MEMO_URL %>">VARL MEMO</a>
+  <!-- Hamburger Menu -->
+  <button
+    class="menu-toggle"
+    aria-label="Toggle menu"
+    aria-expanded="false"
+    id="hamburger"
+    onclick="toggleMenu()"
+  >
+    ☰
+  </button>
+
+  <ul id="navigation" class="nav-links">
+    <li>
+      <a href="<%= OTS_MEMO_URL %>"><i class="fas fa-file-alt"></i> OTS MEMO</a>
     </li>
-    <li class="nav_items">
-      <a href="<%= VIJAY_ANDRA_SLIP_URL%>">VARL SLIP</a>
+    <li>
+      <a href="<%= OTS_SLIP_URL %>"><i class="fas fa-receipt"></i> OTS SLIP</a>
+    </li>
+    <li>
+      <a href="<%= VIJAY_ANDRA_MEMO_URL %>"
+        ><i class="fas fa-file-invoice"></i> VARL MEMO</a
+      >
+    </li>
+    <li>
+      <a href="<%= VIJAY_ANDRA_SLIP_URL %>"
+        ><i class="fas fa-money-check"></i> VARL SLIP</a
+      >
     </li>
   </ul>
 </nav>

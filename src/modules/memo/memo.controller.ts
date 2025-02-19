@@ -42,7 +42,7 @@ export class MemoController {
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader(
       'Content-Disposition',
-      `attachment; filename=${!Truck_number ? 'vijay_memo' : Truck_number}.pdf`,
+      `attachment; filename=${!Truck_number ? 'vijayMemo' : Truck_number}.pdf`,
     );
 
     return pdfStream.pipe(res);
@@ -64,7 +64,7 @@ export class MemoController {
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader(
       'Content-Disposition',
-      `attachment; filename=${!Truck_number ? 'OTS_memo' : Truck_number}.pdf`,
+      `attachment; filename=${!Truck_number ? 'otsMemo' : Truck_number}.pdf`,
     );
 
     return pdfStream.pipe(res);
