@@ -4,6 +4,9 @@ WORKDIR /app
 
 COPY package.json .
 
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
+    PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
+
 RUN npm install -g @nestjs/cli@latest
 
 RUN npm install
