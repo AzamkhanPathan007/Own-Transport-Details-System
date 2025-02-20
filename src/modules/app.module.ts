@@ -6,7 +6,7 @@ import { MemoModule } from './memo/memo.module';
 import { ConfigModule } from '@nestjs/config';
 import { APP_PIPE } from '@nestjs/core';
 import { CacheModule } from '@nestjs/cache-manager';
-import { CacheLogoService } from 'src/providers/cacheLogo.service';
+import { CacheLogoService } from '../providers/cacheLogo.service';
 
 @Module({
   imports: [

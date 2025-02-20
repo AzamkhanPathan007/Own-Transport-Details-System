@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { Data, renderFile } from 'ejs';
+import { CreateMemoDto } from './dto/createMemo.dto';
 import {
   FILE_PATHS,
   PREDEFINED_DIMENSIONS,
-} from 'src/constants/common.constants';
-import { PDFGeneratorService } from 'src/providers/generatePdf.service';
-import { CreateMemoDto } from './dto/createMemo.dto';
-import { FetchCachedLogoService } from 'src/providers/fetchCachedLogo.service';
-import { HelperMethodService } from 'src/providers/helperMethods.service';
+} from '../../constants/common.constants';
+import { FetchCachedLogoService } from '../../providers/fetchCachedLogo.service';
+import { PDFGeneratorService } from '../../providers/generatePdf.service';
+import { HelperMethodService } from '../../providers/helperMethods.service';
 
 @Injectable()
 export class MemoService {

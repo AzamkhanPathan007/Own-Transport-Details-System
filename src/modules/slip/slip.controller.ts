@@ -1,10 +1,10 @@
 import { Body, Controller, Get, Post, Render, Res } from '@nestjs/common';
 import { SlipService } from './slip.service';
-import { RenderService } from 'src/providers/render.service';
 import { CreateSlipDto } from './dto/createSlip.dto';
-import { CUSTOM_HEADINGS } from 'src/constants/common.constants';
 import { Response } from 'express';
-import { FetchCachedLogoService } from 'src/providers/fetchCachedLogo.service';
+import { CUSTOM_HEADINGS } from '../../constants/common.constants';
+import { FetchCachedLogoService } from '../../providers/fetchCachedLogo.service';
+import { RenderService } from '../../providers/render.service';
 
 @Controller('slip')
 export class SlipController {

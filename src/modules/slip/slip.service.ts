@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { Data, renderFile } from 'ejs';
+import { CreateSlipDto } from './dto/createSlip.dto';
 import {
   FILE_PATHS,
   PREDEFINED_DIMENSIONS,
-} from 'src/constants/common.constants';
-import { PDFGeneratorService } from 'src/providers/generatePdf.service';
-import { CreateSlipDto } from './dto/createSlip.dto';
-import { FetchCachedLogoService } from 'src/providers/fetchCachedLogo.service';
+} from '../../constants/common.constants';
+import { FetchCachedLogoService } from '../../providers/fetchCachedLogo.service';
+import { PDFGeneratorService } from '../../providers/generatePdf.service';
 
 @Injectable()
 export class SlipService {

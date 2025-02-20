@@ -5,7 +5,7 @@ import { executablePath, launch } from 'puppeteer';
 import {
   NODE_ENVIRONMENT,
   PUPPETEER_ARGS,
-} from 'src/constants/common.constants';
+} from '../../src/constants/common.constants';
 
 @Injectable()
 export class PDFGeneratorService {
