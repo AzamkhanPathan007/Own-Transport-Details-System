@@ -16,11 +16,15 @@ describe('AppController', () => {
     appService = app.get<AppService>(AppService);
   });
 
-  describe('getHello', () => {
+  describe('AppController', () => {
     it('should return "OK!"', () => {
-      const spy = jest.spyOn(appService, 'getHello');
-      expect(appController.getHello()).toBe('OK!');
+      const spy = jest.spyOn(appService, 'checkHealth');
+      expect(appController.healthCheck()).toBe('OK!');
       expect(spy).toHaveBeenCalled();
+    });
+
+    it('should return undefined', () => {
+      expect(appController.handleRoot()).toBeUndefined();
     });
   });
 });

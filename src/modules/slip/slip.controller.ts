@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Render, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Header,
+  Post,
+  Render,
+  Res,
+} from '@nestjs/common';
 import { SlipService } from './slip.service';
 import { CreateSlipDto } from './dto/createSlip.dto';
 import { Response } from 'express';
@@ -16,12 +24,14 @@ export class SlipController {
 
   @Get('/ots')
   @Render('otsSlip')
+  @Header('Content-Type', 'text/html')
   getOTSSlip() {
     return this.renderService.getRenderObject();
   }
 
   @Get('/vijay')
   @Render('vijaySlip')
+  @Header('Content-Type', 'text/html')
   getVijaySlip() {
     return this.renderService.getRenderObject();
   }

@@ -24,14 +24,20 @@ describe('AppController (e2e)', () => {
   });
 
   //? Health Check Test case
-  it('/ (GET)', async () => {
+  it('/health (GET)', async () => {
     const healthCheckResponse = await request(app.getHttpServer())
-      .get('/')
+      .get('/health')
       .expect(200)
       .expect('OK!');
 
     expect(healthCheckResponse.headers['content-type']).toBe(
       'text/plain; charset=utf-8',
     );
+  });
+
+  it('/ (GET)', async () => {
+    const response = await request(app.getHttpServer()).get('/').expect(302);
+
+    expect(response.headers.location).toBe('/slip/ots');
   });
 });

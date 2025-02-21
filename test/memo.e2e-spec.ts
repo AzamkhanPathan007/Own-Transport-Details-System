@@ -11,7 +11,6 @@ import request from 'supertest';
 import { TEMPLATE_FILE_PATHS } from '../src/constants/common.constants';
 import { memoStub } from './__stubs__/memo.stub';
 import { renderServiceStub } from './__stubs__/renderService.stub';
-import { slipStub } from './__stubs__/slip.stub';
 
 describe('MemoModule (e2e)', () => {
   let app: NestExpressApplication;
@@ -53,19 +52,39 @@ describe('MemoModule (e2e)', () => {
   });
 
   //? Memo API Test cases
-  it('/ots/memo (GET)', async () => {
+  it('/memo/ots (GET)', async () => {
     const otsMemoEjs = await renderFile(
       TEMPLATE_FILE_PATHS.OTS_MEMO,
       renderServiceStub,
     );
 
-    return request(app.getHttpServer())
+    const memoResponse = await request(app.getHttpServer())
       .get('/memo/ots')
       .expect(200)
       .expect(otsMemoEjs);
+
+    expect(memoResponse.headers['content-type']).toBe(
+      'text/html; charset=utf-8',
+    );
   });
 
-  it('/ots/memo (POST)', async () => {
+  it('/memo/vijay (GET)', async () => {
+    const vijayMemoEjs = await renderFile(
+      TEMPLATE_FILE_PATHS.VIJAY_MEMO,
+      renderServiceStub,
+    );
+
+    const memoResponse = await request(app.getHttpServer())
+      .get('/memo/vijay')
+      .expect(200)
+      .expect(vijayMemoEjs);
+
+    expect(memoResponse.headers['content-type']).toBe(
+      'text/html; charset=utf-8',
+    );
+  });
+
+  it('/memo/ots (POST)', async () => {
     const otsMemoResponse = await request(app.getHttpServer())
       .post('/memo/ots')
       .send(memoStub)
@@ -80,18 +99,18 @@ describe('MemoModule (e2e)', () => {
     expect(receivedBuffer.length).toBeGreaterThan(0);
   });
 
-  it('/ots/slip (POST)', async () => {
-    const otsSlipResponse = await request(app.getHttpServer())
-      .post('/slip/ots')
-      .send(slipStub)
+  it('/memo/vijay (POST)', async () => {
+    const vijayMemoResponse = await request(app.getHttpServer())
+      .post('/memo/vijay')
+      .send(memoStub)
       .expect(201);
 
-    expect(otsSlipResponse.headers['content-type']).toBe('application/pdf');
-    expect(otsSlipResponse.headers['content-disposition']).toContain(
+    expect(vijayMemoResponse.headers['content-type']).toBe('application/pdf');
+    expect(vijayMemoResponse.headers['content-disposition']).toContain(
       `attachment; filename=${memoStub.Truck_number}.pdf`,
     );
 
-    const receivedBuffer = otsSlipResponse.body as Buffer;
+    const receivedBuffer = vijayMemoResponse.body as Buffer;
     expect(receivedBuffer.length).toBeGreaterThan(0);
   });
 });

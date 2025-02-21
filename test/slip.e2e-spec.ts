@@ -3,15 +3,15 @@ import { ConfigModule } from '@nestjs/config';
 import { APP_PIPE } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { TestingModule, Test } from '@nestjs/testing';
-import { renderFile } from 'ejs';
 import request from 'supertest';
 import { join } from 'path';
-import { TEMPLATE_FILE_PATHS } from '../src/constants/common.constants';
 import { AppModule } from '../src/modules/app.module';
 import { CacheLogoService } from '../src/providers/cacheLogo.service';
 import { memoStub } from './__stubs__/memo.stub';
-import { renderServiceStub } from './__stubs__/renderService.stub';
 import { slipStub } from './__stubs__/slip.stub';
+import { renderFile } from 'ejs';
+import { TEMPLATE_FILE_PATHS } from '../src/constants/common.constants';
+import { renderServiceStub } from './__stubs__/renderService.stub';
 
 describe('MemoModule (e2e)', () => {
   let app: NestExpressApplication;
@@ -53,34 +53,39 @@ describe('MemoModule (e2e)', () => {
   });
 
   //? Slip API Test cases
-  it('/vijay/memo (GET)', async () => {
-    const vijayMemoEjs = await renderFile(
-      TEMPLATE_FILE_PATHS.VIJAY_MEMO,
+  it('/slip/ots (GET)', async () => {
+    const slipMemoEjs = await renderFile(
+      TEMPLATE_FILE_PATHS.OTS_SLIP,
       renderServiceStub,
     );
 
-    return request(app.getHttpServer())
-      .get('/memo/vijay')
+    const memoResponse = await request(app.getHttpServer())
+      .get('/slip/ots')
       .expect(200)
-      .expect(vijayMemoEjs);
+      .expect(slipMemoEjs);
+
+    expect(memoResponse.headers['content-type']).toBe(
+      'text/html; charset=utf-8',
+    );
   });
 
-  it('/vijay/memo (POST)', async () => {
-    const vijayMemoResponse = await request(app.getHttpServer())
-      .post('/memo/vijay')
-      .send(memoStub)
-      .expect(201);
-
-    expect(vijayMemoResponse.headers['content-type']).toBe('application/pdf');
-    expect(vijayMemoResponse.headers['content-disposition']).toContain(
-      `attachment; filename=${memoStub.Truck_number}.pdf`,
+  it('/slip/vijay (GET)', async () => {
+    const vijaySlipEjs = await renderFile(
+      TEMPLATE_FILE_PATHS.VIJAY_SLIP,
+      renderServiceStub,
     );
 
-    const receivedBuffer = vijayMemoResponse.body as Buffer;
-    expect(receivedBuffer.length).toBeGreaterThan(0);
+    const memoResponse = await request(app.getHttpServer())
+      .get('/slip/vijay')
+      .expect(200)
+      .expect(vijaySlipEjs);
+
+    expect(memoResponse.headers['content-type']).toBe(
+      'text/html; charset=utf-8',
+    );
   });
 
-  it('/vijay/slip (POST)', async () => {
+  it('/slip/ots (POST)', async () => {
     const otsSlipResponse = await request(app.getHttpServer())
       .post('/slip/ots')
       .send(slipStub)
@@ -92,6 +97,21 @@ describe('MemoModule (e2e)', () => {
     );
 
     const receivedBuffer = otsSlipResponse.body as Buffer;
+    expect(receivedBuffer.length).toBeGreaterThan(0);
+  });
+
+  it('/slip/vijay (POST)', async () => {
+    const vijaySlipResponse = await request(app.getHttpServer())
+      .post('/slip/vijay')
+      .send(slipStub)
+      .expect(201);
+
+    expect(vijaySlipResponse.headers['content-type']).toBe('application/pdf');
+    expect(vijaySlipResponse.headers['content-disposition']).toContain(
+      `attachment; filename=${memoStub.Truck_number}.pdf`,
+    );
+
+    const receivedBuffer = vijaySlipResponse.body as Buffer;
     expect(receivedBuffer.length).toBeGreaterThan(0);
   });
 });

@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Render, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Header,
+  Post,
+  Render,
+  Res,
+} from '@nestjs/common';
 import { MemoService } from './memo.service';
 import { CreateMemoDto } from './dto/createMemo.dto';
 import { Response } from 'express';
@@ -16,12 +24,14 @@ export class MemoController {
 
   @Get('/ots')
   @Render('otsMemo')
+  @Header('Content-Type', 'text/html')
   getOTSMemo() {
     return this.renderService.getRenderObject();
   }
 
   @Get('/vijay')
   @Render('vijayMemo')
+  @Header('Content-Type', 'text/html')
   getVijayMemo() {
     return this.renderService.getRenderObject();
   }
