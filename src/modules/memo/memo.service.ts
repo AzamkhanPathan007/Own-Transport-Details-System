@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Data, renderFile } from 'ejs';
 import { CreateMemoDto } from './dto/createMemo.dto';
 import {
-  FILE_PATHS,
+  PDF_FILE_PATHS,
   PREDEFINED_DIMENSIONS,
 } from '../../constants/common.constants';
 import { FetchCachedLogoService } from '../../providers/fetchCachedLogo.service';
@@ -41,7 +41,7 @@ export class MemoService {
       Custom_signature,
     };
 
-    const content = await renderFile(FILE_PATHS.MEMO_PDF, payloadToRender);
+    const content = await renderFile(PDF_FILE_PATHS.MEMO_PDF, payloadToRender);
 
     return await this.pdfGeneratorService.generatePdf(
       PREDEFINED_DIMENSIONS.MEMO_HEIGHT,

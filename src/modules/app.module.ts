@@ -4,9 +4,10 @@ import { AppService } from './app.service';
 import { SlipModule } from './slip/slip.module';
 import { MemoModule } from './memo/memo.module';
 import { ConfigModule } from '@nestjs/config';
-import { APP_PIPE } from '@nestjs/core';
+import { APP_FILTER, APP_PIPE } from '@nestjs/core';
 import { CacheModule } from '@nestjs/cache-manager';
 import { CacheLogoService } from '../providers/cacheLogo.service';
+import { HttpExceptionFilter } from '../filters/httpException.filter';
 
 @Module({
   imports: [
@@ -30,6 +31,10 @@ import { CacheLogoService } from '../providers/cacheLogo.service';
             enableImplicitConversion: true,
           },
         }),
+    },
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter,
     },
   ],
 })

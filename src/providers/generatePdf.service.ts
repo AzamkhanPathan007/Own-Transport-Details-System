@@ -12,12 +12,14 @@ export class PDFGeneratorService {
   constructor(private readonly configService: ConfigService) {}
 
   async generatePdf(height: string, width: string, content: string) {
+    const puppeteerExecutablePath =
+      this.configService.getOrThrow<string>('NODE_ENV') ===
+        NODE_ENVIRONMENT.LOCAL || NODE_ENVIRONMENT.TEST
+        ? executablePath()
+        : this.configService.getOrThrow<string>('CHROMIUM_PATH');
+
     const browser = await launch({
-      executablePath:
-        this.configService.getOrThrow<string>('NODE_ENV') ===
-        NODE_ENVIRONMENT.LOCAL
-          ? executablePath()
-          : this.configService.getOrThrow<string>('CHROMIUM_PATH'),
+      executablePath: puppeteerExecutablePath,
       args: PUPPETEER_ARGS,
     });
 

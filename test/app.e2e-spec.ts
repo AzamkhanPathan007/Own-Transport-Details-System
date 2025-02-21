@@ -1,29 +1,37 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
-import { App } from 'supertest/types';
 import { AppModule } from '../src/modules/app.module';
 import { ConfigModule } from '@nestjs/config';
+import { join } from 'node:path';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 describe('AppController (e2e)', () => {
-  let app: INestApplication<App>;
+  let app: NestExpressApplication;
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [
         AppModule,
-        ConfigModule.forRoot({ isGlobal: true, cache: true }),
+        ConfigModule.forRoot({
+          envFilePath: join('.env.test'),
+        }),
       ],
     }).compile();
 
-    app = moduleFixture.createNestApplication();
+    app = moduleFixture.createNestApplication<NestExpressApplication>();
+
     await app.init();
   });
 
-  it('/ (GET)', () => {
-    return request(app.getHttpServer())
+  //? Health Check Test case
+  it('/ (GET)', async () => {
+    const healthCheckResponse = await request(app.getHttpServer())
       .get('/')
       .expect(200)
-      .expect('Hello World!');
+      .expect('OK!');
+
+    expect(healthCheckResponse.headers['content-type']).toBe(
+      'text/plain; charset=utf-8',
+    );
   });
 });
