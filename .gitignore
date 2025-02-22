@@ -57,6 +57,7 @@ node_modules
 # Project files
 package-lock.json
 tsconfig.build.tsbuildinfo
+railway.json
 
 #Executables
 act.exe
