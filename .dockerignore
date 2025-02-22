@@ -6,7 +6,7 @@ dist
 .gitignore
 .nvmrc
 .prettierrc
+.husky
 eslint.config.mjs
-nest-cli.json
 README.md
 test
