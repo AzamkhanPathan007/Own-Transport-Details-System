@@ -9,7 +9,7 @@ import { healthCheckStub } from './__stubs__/healthCheck.stub';
 describe('AppController (e2e)', () => {
   let app: NestExpressApplication;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [
         AppModule,
@@ -22,6 +22,10 @@ describe('AppController (e2e)', () => {
     app = moduleFixture.createNestApplication<NestExpressApplication>();
 
     await app.init();
+  });
+
+  afterAll(async () => {
+    await app.close();
   });
 
   //? Health Check Test case

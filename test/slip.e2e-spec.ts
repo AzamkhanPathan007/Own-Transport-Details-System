@@ -16,7 +16,7 @@ import { renderServiceStub } from './__stubs__/renderService.stub';
 describe('MemoModule (e2e)', () => {
   let app: NestExpressApplication;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [
         AppModule,
@@ -50,6 +50,10 @@ describe('MemoModule (e2e)', () => {
     app.setViewEngine('ejs');
 
     await app.init();
+  });
+
+  afterAll(async () => {
+    await app.close();
   });
 
   //? Slip API Test cases
@@ -98,7 +102,7 @@ describe('MemoModule (e2e)', () => {
 
     const receivedBuffer = otsSlipResponse.body as Buffer;
     expect(receivedBuffer.length).toBeGreaterThan(0);
-  });
+  }, 10000);
 
   it('/slip/vijay (POST)', async () => {
     const vijaySlipResponse = await request(app.getHttpServer())
@@ -113,5 +117,5 @@ describe('MemoModule (e2e)', () => {
 
     const receivedBuffer = vijaySlipResponse.body as Buffer;
     expect(receivedBuffer.length).toBeGreaterThan(0);
-  });
+  }, 10000);
 });

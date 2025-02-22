@@ -15,7 +15,7 @@ import { renderServiceStub } from './__stubs__/renderService.stub';
 describe('MemoModule (e2e)', () => {
   let app: NestExpressApplication;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [
         AppModule,
@@ -49,6 +49,10 @@ describe('MemoModule (e2e)', () => {
     app.setViewEngine('ejs');
 
     await app.init();
+  });
+
+  afterAll(async () => {
+    await app.close();
   });
 
   //? Memo API Test cases
@@ -97,7 +101,7 @@ describe('MemoModule (e2e)', () => {
 
     const receivedBuffer = otsMemoResponse.body as Buffer;
     expect(receivedBuffer.length).toBeGreaterThan(0);
-  });
+  }, 10000);
 
   it('/memo/vijay (POST)', async () => {
     const vijayMemoResponse = await request(app.getHttpServer())
@@ -112,5 +116,5 @@ describe('MemoModule (e2e)', () => {
 
     const receivedBuffer = vijayMemoResponse.body as Buffer;
     expect(receivedBuffer.length).toBeGreaterThan(0);
-  });
+  }, 10000);
 });

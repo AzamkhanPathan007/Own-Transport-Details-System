@@ -11,7 +11,7 @@ import { renderServiceStub } from '../../../test/__stubs__/renderService.stub';
 describe('MemoController', () => {
   let controller: MemoController;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [MemoController],
       providers: [
