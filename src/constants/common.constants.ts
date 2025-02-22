@@ -19,9 +19,16 @@ export const PREDEFINED_DIMENSIONS = {
   SLIP_WIDTH: '210mm',
 } as const;
 
-export const FILE_PATHS = {
+export const PDF_FILE_PATHS = {
   MEMO_PDF: join('views/pdfTemplate/memoPdf.ejs'),
   SLIP_PDF: join('views/pdfTemplate/slipPdf.ejs'),
+} as const;
+
+export const TEMPLATE_FILE_PATHS = {
+  OTS_MEMO: join('views/otsMemo.ejs'),
+  OTS_SLIP: join('views/otsSlip.ejs'),
+  VIJAY_MEMO: join('views/vijayMemo.ejs'),
+  VIJAY_SLIP: join('views/vijaySlip.ejs'),
 } as const;
 
 export const CACHE_KEYS = {
@@ -34,6 +41,7 @@ export const CACHE_KEYS = {
 export const NODE_ENVIRONMENT = {
   LOCAL: 'local',
   PRODUCTION: 'production',
+  TEST: 'test',
 } as const;
 
 export const PUPPETEER_ARGS = [

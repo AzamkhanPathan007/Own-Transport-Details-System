@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreateMemoDto } from 'src/modules/memo/dto/createMemo.dto';
+import { CreateMemoDto } from '../../src/modules/memo/dto/createMemo.dto';
 
 @Injectable()
 export class HelperMethodService {

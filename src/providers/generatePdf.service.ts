@@ -5,19 +5,21 @@ import { executablePath, launch } from 'puppeteer';
 import {
   NODE_ENVIRONMENT,
   PUPPETEER_ARGS,
-} from 'src/constants/common.constants';
+} from '../../src/constants/common.constants';
 
 @Injectable()
 export class PDFGeneratorService {
   constructor(private readonly configService: ConfigService) {}
 
   async generatePdf(height: string, width: string, content: string) {
+    const puppeteerExecutablePath =
+      this.configService.getOrThrow<string>('NODE_ENV') ===
+        NODE_ENVIRONMENT.LOCAL || NODE_ENVIRONMENT.TEST
+        ? executablePath()
+        : this.configService.getOrThrow<string>('CHROMIUM_PATH');
+
     const browser = await launch({
-      executablePath:
-        this.configService.getOrThrow<string>('NODE_ENV') ===
-        NODE_ENVIRONMENT.LOCAL
-          ? executablePath()
-          : this.configService.getOrThrow<string>('CHROMIUM_PATH'),
+      executablePath: puppeteerExecutablePath,
       args: PUPPETEER_ARGS,
     });
 

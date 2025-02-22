@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { Data, renderFile } from 'ejs';
-import {
-  FILE_PATHS,
-  PREDEFINED_DIMENSIONS,
-} from 'src/constants/common.constants';
-import { PDFGeneratorService } from 'src/providers/generatePdf.service';
 import { CreateSlipDto } from './dto/createSlip.dto';
-import { FetchCachedLogoService } from 'src/providers/fetchCachedLogo.service';
+import {
+  PDF_FILE_PATHS,
+  PREDEFINED_DIMENSIONS,
+} from '../../constants/common.constants';
+import { FetchCachedLogoService } from '../../providers/fetchCachedLogo.service';
+import { PDFGeneratorService } from '../../providers/generatePdf.service';
 
 @Injectable()
 export class SlipService {
@@ -33,7 +33,7 @@ export class SlipService {
       Custom_signature,
     };
 
-    const content = await renderFile(FILE_PATHS.SLIP_PDF, payloadToRender);
+    const content = await renderFile(PDF_FILE_PATHS.SLIP_PDF, payloadToRender);
 
     return await this.pdfGeneratorService.generatePdf(
       PREDEFINED_DIMENSIONS.SLIP_HEIGHT,

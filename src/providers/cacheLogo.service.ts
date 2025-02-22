@@ -8,7 +8,7 @@ import {
 import { Cache } from 'cache-manager';
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { LOGO_PATHS, CACHE_KEYS } from 'src/constants/common.constants';
+import { LOGO_PATHS, CACHE_KEYS } from '../../src/constants/common.constants';
 
 @Injectable()
 export class CacheLogoService implements OnApplicationBootstrap {

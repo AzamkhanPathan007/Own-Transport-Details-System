@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { SlipService } from './slip.service';
 import { SlipController } from './slip.controller';
-import { RenderService } from 'src/providers/render.service';
-import { PDFGeneratorService } from 'src/providers/generatePdf.service';
-import { FetchCachedLogoService } from 'src/providers/fetchCachedLogo.service';
+import { FetchCachedLogoService } from '../../providers/fetchCachedLogo.service';
+import { PDFGeneratorService } from '../../providers/generatePdf.service';
+import { RenderService } from '../../providers/render.service';
 
 @Module({
   controllers: [SlipController],
