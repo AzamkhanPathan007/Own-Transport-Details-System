@@ -3,10 +3,11 @@ import { AppController } from './app.controller';
 import { SlipModule } from './slip/slip.module';
 import { MemoModule } from './memo/memo.module';
 import { ConfigModule } from '@nestjs/config';
-import { APP_FILTER, APP_PIPE } from '@nestjs/core';
+import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { CacheModule } from '@nestjs/cache-manager';
 import { CacheLogoService } from '../providers/cacheLogo.service';
 import { HttpExceptionFilter } from '../filters/httpException.filter';
+import { LoggingInterceptor } from '../interceptors/logging.interceptor';
 
 @Module({
   imports: [
@@ -33,6 +34,10 @@ import { HttpExceptionFilter } from '../filters/httpException.filter';
     {
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LoggingInterceptor,
     },
   ],
 })
