@@ -1,6 +1,5 @@
 import { Module, ValidationPipe } from '@nestjs/common';
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { SlipModule } from './slip/slip.module';
 import { MemoModule } from './memo/memo.module';
 import { ConfigModule } from '@nestjs/config';
@@ -18,7 +17,6 @@ import { HttpExceptionFilter } from '../filters/httpException.filter';
   ],
   controllers: [AppController],
   providers: [
-    AppService,
     CacheLogoService,
     {
       provide: APP_PIPE,

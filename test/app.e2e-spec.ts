@@ -4,6 +4,7 @@ import { AppModule } from '../src/modules/app.module';
 import { ConfigModule } from '@nestjs/config';
 import { join } from 'node:path';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import { healthCheckStub } from './__stubs__/healthCheck.stub';
 
 describe('AppController (e2e)', () => {
   let app: NestExpressApplication;
@@ -28,10 +29,10 @@ describe('AppController (e2e)', () => {
     const healthCheckResponse = await request(app.getHttpServer())
       .get('/health')
       .expect(200)
-      .expect('OK!');
+      .expect(healthCheckStub);
 
     expect(healthCheckResponse.headers['content-type']).toBe(
-      'text/plain; charset=utf-8',
+      'application/json; charset=utf-8',
     );
   });
 
