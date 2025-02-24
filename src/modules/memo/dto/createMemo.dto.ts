@@ -13,10 +13,8 @@ export class CreateMemoDto {
   @IsOptional()
   @IsString()
   @Transform(({ value }) => {
-    const date = new Date(value);
-    return isNaN(date.getTime())
-      ? new Date().toLocaleDateString('en-GB')
-      : date.toLocaleDateString('en-GB');
+    const date = value ? new Date(value) : new Date();
+    return date.toLocaleDateString('en-GB');
   })
   Inserted_date: string;
 

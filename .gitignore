@@ -39,6 +39,7 @@ lerna-debug.log*
 
 # dotenv environment variable files
 .env
+.env.*
 
 # temp directory
 .temp
@@ -60,3 +61,4 @@ tsconfig.build.tsbuildinfo
 
 #Executables
 act.exe
+chrome
