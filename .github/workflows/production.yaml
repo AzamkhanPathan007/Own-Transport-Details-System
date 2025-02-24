@@ -10,7 +10,6 @@ jobs:
 
     env:
       CHROMIUM_PATH: '/usr/bin/chromium-browser'
-      NODE_ENV: 'test'
 
     steps:
       - uses: actions/checkout@v3
