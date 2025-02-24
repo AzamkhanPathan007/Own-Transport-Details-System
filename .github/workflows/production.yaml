@@ -8,20 +8,37 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
+    env:
+      CHROMIUM_PATH: '/usr/bin/chromium-browser'
+      NODE_ENV: 'test'
+
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js 22
-      uses: actions/setup-node@v3
-      with:
-        node-version: 22
-    - run: npm install
-    - run: npm run test
-    - run: npm run test:e2e
+      - uses: actions/checkout@v3
 
-    - name: Install Railway
-      run: npm i -g @railway/cli
+      - name: Use Node.js 22
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22
 
-    - name: Deploy
-      run: railway up --service TransportApp
-      env:
-        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Install Chromium for Test cases
+        run: |
+          sudo apt update
+          sudo apt install -y chromium-browser
+          echo "CHROMIUM_PATH=/usr/bin/chromium-browser" >> $GITHUB_ENV
+
+      - name: Run Tests
+        run: npm run test
+
+      - name: Run End-to-End Tests
+        run: npm run test:e2e
+
+      - name: Install Railway CLI
+        run: npm i -g @railway/cli
+
+      - name: Deploy to Railway
+        run: railway up --service TransportApp
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
