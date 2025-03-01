@@ -25,7 +25,7 @@ export class LoggingInterceptor implements NestInterceptor {
         const { statusCode } = response;
 
         this.logger.log(
-          `\n🚀 [${method}] ${url} | Status: ${statusCode} \n📌 Controller: ${context.getClass().name} \n🔧 Handler: ${context.getHandler().name} \n⏱️ Execution Time: ${Date.now() - now}ms`,
+          `\n🚀 [${method}] ${url} | Status: ${statusCode} \n📌 Controller: ${context.getClass().name} \n🔧 Handler: ${context.getHandler().name} \n⏱️  Execution Time: ${Date.now() - now}ms`,
         );
       }),
     );
