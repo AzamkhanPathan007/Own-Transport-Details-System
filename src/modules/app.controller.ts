@@ -3,7 +3,7 @@ import { Controller, Get, Redirect } from '@nestjs/common';
 @Controller()
 export class AppController {
   @Get()
-  @Redirect('/slip/ots')
+  @Redirect('/memo/ots')
   handleRoot() {
     return;
   }

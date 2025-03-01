@@ -8,12 +8,17 @@ import { CacheModule } from '@nestjs/cache-manager';
 import { CacheLogoService } from '../providers/cacheLogo.service';
 import { HttpExceptionFilter } from '../filters/httpException.filter';
 import { LoggingInterceptor } from '../interceptors/logging.interceptor';
+import getEnvFilePath from '../config/envStrategy.config';
 
 @Module({
   imports: [
     SlipModule,
     MemoModule,
-    ConfigModule.forRoot({ isGlobal: true, cache: true }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      cache: true,
+      envFilePath: getEnvFilePath(),
+    }),
     CacheModule.register({ isGlobal: true }),
   ],
   controllers: [AppController],

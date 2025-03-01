@@ -43,6 +43,6 @@ describe('AppController (e2e)', () => {
   it('/ (GET)', async () => {
     const response = await request(app.getHttpServer()).get('/').expect(302);
 
-    expect(response.headers.location).toBe('/slip/ots');
+    expect(response.headers.location).toBe('/memo/ots');
   });
 });

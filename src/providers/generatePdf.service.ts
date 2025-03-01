@@ -18,7 +18,12 @@ export class PDFGeneratorService {
       const page = await browser.newPage();
       await page.setContent(content, { waitUntil: 'networkidle0' });
 
-      const pdfReadableStream = await page.createPDFStream({ height, width });
+      const pdfReadableStream = await page.createPDFStream({
+        height,
+        width,
+        printBackground: true,
+        scale: 1,
+      });
 
       const pdfStream = Readable.from(pdfReadableStream);
 

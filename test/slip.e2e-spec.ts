@@ -1,5 +1,4 @@
 import { ValidationPipe } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
 import { APP_PIPE } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { TestingModule, Test } from '@nestjs/testing';
@@ -13,17 +12,12 @@ import { renderFile } from 'ejs';
 import { TEMPLATE_FILE_PATHS } from '../src/constants/common.constants';
 import { renderServiceStub } from './__stubs__/renderService.stub';
 
-describe('MemoModule (e2e)', () => {
+describe('SlipModule (e2e)', () => {
   let app: NestExpressApplication;
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [
-        AppModule,
-        ConfigModule.forRoot({
-          envFilePath: join('.env.test'),
-        }),
-      ],
+      imports: [AppModule],
       providers: [
         CacheLogoService,
         {
@@ -58,17 +52,17 @@ describe('MemoModule (e2e)', () => {
 
   //? Slip API Test cases
   it('/slip/ots (GET)', async () => {
-    const slipMemoEjs = await renderFile(
+    const otsSlipEjs = await renderFile(
       TEMPLATE_FILE_PATHS.OTS_SLIP,
       renderServiceStub,
     );
 
-    const memoResponse = await request(app.getHttpServer())
+    const otsSlipResponse = await request(app.getHttpServer())
       .get('/slip/ots')
-      .expect(200)
-      .expect(slipMemoEjs);
+      .expect(200);
 
-    expect(memoResponse.headers['content-type']).toBe(
+    expect(otsSlipResponse.text).toBe(otsSlipEjs);
+    expect(otsSlipResponse.headers['content-type']).toBe(
       'text/html; charset=utf-8',
     );
   });
@@ -79,12 +73,12 @@ describe('MemoModule (e2e)', () => {
       renderServiceStub,
     );
 
-    const memoResponse = await request(app.getHttpServer())
+    const vijaySlipResponse = await request(app.getHttpServer())
       .get('/slip/vijay')
-      .expect(200)
-      .expect(vijaySlipEjs);
+      .expect(200);
 
-    expect(memoResponse.headers['content-type']).toBe(
+    expect(vijaySlipResponse.text).toBe(vijaySlipEjs);
+    expect(vijaySlipResponse.headers['content-type']).toBe(
       'text/html; charset=utf-8',
     );
   });

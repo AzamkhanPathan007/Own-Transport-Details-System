@@ -1,5 +1,4 @@
 import { ValidationPipe } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
 import { APP_PIPE } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { TestingModule, Test } from '@nestjs/testing';
@@ -17,12 +16,7 @@ describe('MemoModule (e2e)', () => {
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [
-        AppModule,
-        ConfigModule.forRoot({
-          envFilePath: join('.env.test'),
-        }),
-      ],
+      imports: [AppModule],
       providers: [
         CacheLogoService,
         {
@@ -62,12 +56,12 @@ describe('MemoModule (e2e)', () => {
       renderServiceStub,
     );
 
-    const memoResponse = await request(app.getHttpServer())
+    const otsMemoResponse = await request(app.getHttpServer())
       .get('/memo/ots')
-      .expect(200)
-      .expect(otsMemoEjs);
+      .expect(200);
 
-    expect(memoResponse.headers['content-type']).toBe(
+    expect(otsMemoResponse.text).toBe(otsMemoEjs);
+    expect(otsMemoResponse.headers['content-type']).toBe(
       'text/html; charset=utf-8',
     );
   });
@@ -78,12 +72,12 @@ describe('MemoModule (e2e)', () => {
       renderServiceStub,
     );
 
-    const memoResponse = await request(app.getHttpServer())
+    const vijayMemoResponse = await request(app.getHttpServer())
       .get('/memo/vijay')
-      .expect(200)
-      .expect(vijayMemoEjs);
+      .expect(200);
 
-    expect(memoResponse.headers['content-type']).toBe(
+    expect(vijayMemoResponse.text).toBe(vijayMemoEjs);
+    expect(vijayMemoResponse.headers['content-type']).toBe(
       'text/html; charset=utf-8',
     );
   });
