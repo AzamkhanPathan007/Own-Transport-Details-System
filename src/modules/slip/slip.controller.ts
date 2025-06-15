@@ -43,7 +43,7 @@ export class SlipController {
     const { Company_logo } =
       await this.fetchCachedLogoService.getOTSCompanyLogo();
 
-    const pdfStream = await this.slipService.createSlip(
+    const pdfBuffer = await this.slipService.createSlip(
       body,
       CUSTOM_HEADINGS.OTS_CUSTOM_HEADING,
       Company_logo,
@@ -55,7 +55,7 @@ export class SlipController {
       `attachment; filename=${!Truck_number ? 'otsSlip' : Truck_number}.pdf`,
     );
 
-    return pdfStream.pipe(res);
+    return res.end(pdfBuffer);
   }
 
   @Post('/vijay')
@@ -65,7 +65,7 @@ export class SlipController {
     const { Company_logo } =
       await this.fetchCachedLogoService.getVARLCompanyLogo();
 
-    const pdfStream = await this.slipService.createSlip(
+    const pdfBuffer = await this.slipService.createSlip(
       body,
       CUSTOM_HEADINGS.VARL_CUSTOM_HEADING,
       Company_logo,
@@ -77,6 +77,6 @@ export class SlipController {
       `attachment; filename=${!Truck_number ? 'vijaySlip' : Truck_number}.pdf`,
     );
 
-    return pdfStream.pipe(res);
+    return res.end(pdfBuffer);
   }
 }

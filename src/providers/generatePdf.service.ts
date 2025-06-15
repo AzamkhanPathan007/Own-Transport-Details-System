@@ -1,48 +1,49 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Readable } from 'node:stream';
-import { launch } from 'puppeteer-core';
-import { PUPPETEER_ARGS } from '../../src/constants/common.constants';
+import { Worker } from 'worker_threads';
+import {
+  PUPPETEER_ARGS,
+  WORKER_FILE_PATH,
+} from '../../src/constants/common.constants';
 
 @Injectable()
 export class PDFGeneratorService {
   constructor(private readonly configService: ConfigService) {}
 
-  async generatePdf(height: string, width: string, content: string) {
-    const browser = await launch({
-      executablePath: this.configService.getOrThrow<string>('CHROMIUM_PATH'),
-      args: PUPPETEER_ARGS,
+  generatePdf(height: string, width: string, content: string): Promise<Buffer> {
+    return new Promise((resolve, reject) => {
+      const worker = new Worker(WORKER_FILE_PATH, {
+        workerData: {
+          height,
+          width,
+          content,
+          executablePath: this.configService.get<string>('CHROMIUM_PATH'),
+          args: PUPPETEER_ARGS,
+        },
+      });
+
+      worker.on('message', (data: Buffer | { data: { error: string } }) => {
+        if ('error' in data) {
+          reject(new BadRequestException(data.error));
+        } else {
+          resolve(data as Buffer);
+        }
+      });
+
+      worker.on('error', reject);
+      worker.on('exit', (code) => {
+        if (code !== 0) {
+          reject(
+            new InternalServerErrorException(
+              `Worker stopped with exit code ${code}`,
+            ),
+          );
+        }
+      });
     });
-
-    try {
-      const page = await browser.newPage();
-      await page.setContent(content, { waitUntil: 'networkidle0' });
-
-      const pdfReadableStream = await page.createPDFStream({
-        height,
-        width,
-        printBackground: true,
-        scale: 1,
-      });
-
-      const pdfStream = Readable.from(pdfReadableStream);
-
-      pdfStream.on('end', () => {
-        browser.close().catch((err) => {
-          throw err;
-        });
-      });
-
-      pdfStream.on('error', (err) => {
-        browser.close().catch(() => {
-          throw err;
-        });
-      });
-
-      return pdfStream;
-    } catch (error) {
-      await browser.close();
-      throw error;
-    }
   }
 }

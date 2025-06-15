@@ -43,7 +43,7 @@ export class MemoController {
     const { Company_logo } =
       await this.fetchCachedLogoService.getVARLCompanyLogo();
 
-    const pdfStream = await this.memoService.createMemo(
+    const pdfBuffer = await this.memoService.createMemo(
       body,
       CUSTOM_HEADINGS.VARL_CUSTOM_HEADING,
       Company_logo,
@@ -55,7 +55,7 @@ export class MemoController {
       `attachment; filename=${!Truck_number ? 'vijayMemo' : Truck_number}.pdf`,
     );
 
-    return pdfStream.pipe(res);
+    return res.end(pdfBuffer);
   }
 
   @Post('/ots')
@@ -65,7 +65,7 @@ export class MemoController {
     const { Company_logo } =
       await this.fetchCachedLogoService.getOTSCompanyLogo();
 
-    const pdfStream = await this.memoService.createMemo(
+    const pdfBuffer = await this.memoService.createMemo(
       body,
       CUSTOM_HEADINGS.OTS_CUSTOM_HEADING,
       Company_logo,
@@ -77,6 +77,6 @@ export class MemoController {
       `attachment; filename=${!Truck_number ? 'otsMemo' : Truck_number}.pdf`,
     );
 
-    return pdfStream.pipe(res);
+    return res.end(pdfBuffer);
   }
 }

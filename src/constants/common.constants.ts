@@ -50,3 +50,12 @@ export const PUPPETEER_ARGS = [
   '--disable-gpu',
   '--disable-dev-shm-usage',
 ];
+
+export const WORKER_FILE_PATH = join(
+  __dirname,
+  '..',
+  '..',
+  'dist',
+  'workers',
+  'generatePdf.worker.js',
+);
