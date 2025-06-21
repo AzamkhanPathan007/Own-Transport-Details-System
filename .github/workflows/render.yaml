@@ -18,8 +18,8 @@ jobs:
       - name: Install latest Render CLI (v2.1.4)
         run: |
           curl -L https://github.com/render-oss/cli/releases/download/v2.1.4/cli_2.1.4_linux_amd64.zip -o render.zip
-          unzip render.zip
-          sudo mv cli_2.1.4 /usr/local/bin/render
+          unzip -o -q render.zip
+          sudo mv cli_v2.1.4 /usr/local/bin/render
           sudo chmod +x /usr/local/bin/render
 
       - name: Trigger deploy with Render CLI
