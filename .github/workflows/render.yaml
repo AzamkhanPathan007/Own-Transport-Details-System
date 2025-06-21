@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=http://json-schema.org/draft-07/schema#
 
-name: Deploy to render
+name: Deploy to Render
 
 on: workflow_dispatch
 
@@ -15,11 +15,12 @@ jobs:
         with:
           node-version: 22
 
-      - name: Install Render CLI
+      - name: Install latest Render CLI (v2.1.4)
         run: |
-          curl -L https://github.com/render-oss/cli/releases/download/v1.1.0/cli_1.1.0_linux_amd64.zip -o render.zip
+          curl -L https://github.com/render-oss/cli/releases/download/v2.1.4/cli_2.1.4_linux_amd64.zip -o render.zip
           unzip render.zip
-          sudo mv cli_v1.1.0 /usr/local/bin/render
+          sudo mv cli_2.1.4 /usr/local/bin/render
+          sudo chmod +x /usr/local/bin/render
 
       - name: Trigger deploy with Render CLI
         env:
