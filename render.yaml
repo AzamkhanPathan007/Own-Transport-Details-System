@@ -1,0 +1,19 @@
+services:
+  - type: web
+    runtime: docker
+    name: Transport_pdf_service
+    repo: https://github.com/PATHANAZAMKHAN/Own-Transport-Details-System.git
+    branch: OTS_nest_v3
+    plan: free
+    region: singapore
+    dockerCommand: npm run start:prod
+    healthCheckPath: /health
+    envVars:
+      - key: CHROMIUM_PATH
+        sync: true
+
+      - key: NODE_ENV
+        sync: true
+
+      - key: WEB_URL
+        sync: true
