@@ -5,11 +5,10 @@ import {
   Header,
   Post,
   Render,
-  Res,
+  StreamableFile,
 } from '@nestjs/common';
 import { SlipService } from './slip.service';
 import { CreateSlipDto } from './dto/createSlip.dto';
-import { Response } from 'express';
 import { CUSTOM_HEADINGS } from '../../constants/common.constants';
 import { FetchCachedLogoService } from '../../providers/fetchCachedLogo.service';
 import { RenderService } from '../../providers/render.service';
@@ -37,7 +36,7 @@ export class SlipController {
   }
 
   @Post('/ots')
-  async createOTSSlip(@Res() res: Response, @Body() body: CreateSlipDto) {
+  async createOTSSlip(@Body() body: CreateSlipDto) {
     const { Truck_number } = body;
 
     const { Company_logo } =
@@ -49,17 +48,14 @@ export class SlipController {
       Company_logo,
     );
 
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader(
-      'Content-Disposition',
-      `attachment; filename=${!Truck_number ? 'otsSlip' : Truck_number}.pdf`,
-    );
-
-    return res.end(pdfBuffer);
+    return new StreamableFile(pdfBuffer, {
+      type: 'application/pdf',
+      disposition: `attachment; filename=${!Truck_number ? 'otsSlip' : Truck_number}.pdf`,
+    });
   }
 
   @Post('/vijay')
-  async createVijaySlip(@Res() res: Response, @Body() body: CreateSlipDto) {
+  async createVijaySlip(@Body() body: CreateSlipDto) {
     const { Truck_number } = body;
 
     const { Company_logo } =
@@ -71,12 +67,9 @@ export class SlipController {
       Company_logo,
     );
 
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader(
-      'Content-Disposition',
-      `attachment; filename=${!Truck_number ? 'vijaySlip' : Truck_number}.pdf`,
-    );
-
-    return res.end(pdfBuffer);
+    return new StreamableFile(pdfBuffer, {
+      type: 'application/pdf',
+      disposition: `attachment; filename=${!Truck_number ? 'vijaySlip' : Truck_number}.pdf`,
+    });
   }
 }

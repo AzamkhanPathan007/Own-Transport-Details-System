@@ -5,11 +5,10 @@ import {
   Header,
   Post,
   Render,
-  Res,
+  StreamableFile,
 } from '@nestjs/common';
 import { MemoService } from './memo.service';
 import { CreateMemoDto } from './dto/createMemo.dto';
-import { Response } from 'express';
 import { CUSTOM_HEADINGS } from '../../constants/common.constants';
 import { FetchCachedLogoService } from '../../providers/fetchCachedLogo.service';
 import { RenderService } from '../../providers/render.service';
@@ -37,7 +36,7 @@ export class MemoController {
   }
 
   @Post('/vijay')
-  async createVijayMemo(@Res() res: Response, @Body() body: CreateMemoDto) {
+  async createVijayMemo(@Body() body: CreateMemoDto) {
     const { Truck_number } = body;
 
     const { Company_logo } =
@@ -49,17 +48,14 @@ export class MemoController {
       Company_logo,
     );
 
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader(
-      'Content-Disposition',
-      `attachment; filename=${!Truck_number ? 'vijayMemo' : Truck_number}.pdf`,
-    );
-
-    return res.end(pdfBuffer);
+    return new StreamableFile(pdfBuffer, {
+      type: 'application/pdf',
+      disposition: `attachment; filename=${!Truck_number ? 'vijayMemo' : Truck_number}.pdf`,
+    });
   }
 
   @Post('/ots')
-  async createOTSMemo(@Res() res: Response, @Body() body: CreateMemoDto) {
+  async createOTSMemo(@Body() body: CreateMemoDto) {
     const { Truck_number } = body;
 
     const { Company_logo } =
@@ -71,12 +67,9 @@ export class MemoController {
       Company_logo,
     );
 
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader(
-      'Content-Disposition',
-      `attachment; filename=${!Truck_number ? 'otsMemo' : Truck_number}.pdf`,
-    );
-
-    return res.end(pdfBuffer);
+    return new StreamableFile(pdfBuffer, {
+      type: 'application/pdf',
+      disposition: `attachment; filename=${!Truck_number ? 'otsMemo' : Truck_number}.pdf`,
+    });
   }
 }
