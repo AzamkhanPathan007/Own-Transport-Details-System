@@ -8,12 +8,12 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
 
-      - name: Use Node.js 22
-        uses: actions/setup-node@v3
+      - name: Use Node.js 24.11.1
+        uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: 24.11.1
 
       - name: Install latest Render CLI (v2.1.4)
         run: |
