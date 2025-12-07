@@ -1,0 +1,32 @@
+# yaml-language-server: $schema=http://json-schema.org/draft-07/schema#
+
+name: Deploy to Railway
+
+on:
+  workflow_dispatch:
+    inputs:
+      run_branch:
+        description: Branch to checkout for this run
+        required: true
+        default: OTS_nest_v3
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24.11.1
+          cache: npm
+
+      - name: Install Railway CLI
+        run: npm i -g @railway/cli
+
+      - name: Deploy to Railway
+        run: railway up --service TransportApp
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
