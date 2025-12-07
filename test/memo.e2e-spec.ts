@@ -1,114 +1,120 @@
+import { join } from 'node:path';
 import { ValidationPipe } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { APP_PIPE } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import { TestingModule, Test } from '@nestjs/testing';
-import { join } from 'node:path';
-import { AppModule } from '../src/modules/app.module';
-import { CacheLogoService } from '../src/providers/cacheLogo.service';
+import { Test, TestingModule } from '@nestjs/testing';
 import { renderFile } from 'ejs';
 import request from 'supertest';
 import { TEMPLATE_FILE_PATHS } from '../src/constants/common.constants';
+import { AppModule } from '../src/modules/app.module';
+import { CacheLogoService } from '../src/providers/cacheLogo.service';
 import { memoStub } from './__stubs__/memo.stub';
-import { renderServiceStub } from './__stubs__/renderService.stub';
+import { createRenderServiceStub } from './__stubs__/renderService.stub';
 
 describe('MemoModule (e2e)', () => {
-  let app: NestExpressApplication;
+	let app: NestExpressApplication;
+	let webUrl: string;
 
-  beforeAll(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-      providers: [
-        CacheLogoService,
-        {
-          provide: APP_PIPE,
-          useFactory: () =>
-            new ValidationPipe({
-              transform: true,
-              whitelist: true,
-              forbidNonWhitelisted: true,
-              transformOptions: {
-                enableImplicitConversion: true,
-              },
-            }),
-        },
-      ],
-    }).compile();
+	beforeAll(async () => {
+		const moduleFixture: TestingModule = await Test.createTestingModule({
+			imports: [AppModule],
+			providers: [
+				CacheLogoService,
+				{
+					provide: APP_PIPE,
+					useFactory: () =>
+						new ValidationPipe({
+							transform: true,
+							whitelist: true,
+							forbidNonWhitelisted: true,
+							transformOptions: {
+								enableImplicitConversion: true,
+							},
+						}),
+				},
+			],
+		}).compile();
 
-    app = moduleFixture.createNestApplication<NestExpressApplication>();
+		app = moduleFixture.createNestApplication<NestExpressApplication>();
 
-    app.useStaticAssets(join('public'));
+		app.useStaticAssets(join('public'));
 
-    app.setBaseViewsDir(join('views'));
+		app.setBaseViewsDir(join('views'));
 
-    app.setViewEngine('ejs');
+		app.setViewEngine('ejs');
 
-    await app.init();
-  });
+		await app.init();
 
-  afterAll(async () => {
-    await app.close();
-  });
+		// Get WEB_URL from ConfigService
+		const configService = moduleFixture.get<ConfigService>(ConfigService);
+		webUrl = configService.get<string>('WEB_URL') || 'http://localhost:3000';
+	});
 
-  //? Memo API Test cases
-  it('/memo/ots (GET)', async () => {
-    const otsMemoEjs = await renderFile(
-      TEMPLATE_FILE_PATHS.OTS_MEMO,
-      renderServiceStub,
-    );
+	afterAll(async () => {
+		await app.close();
+	});
 
-    const otsMemoResponse = await request(app.getHttpServer())
-      .get('/memo/ots')
-      .expect(200);
+	//? Memo API Test cases
+	it('/memo/ots (GET)', async () => {
+		const otsMemoEjs = await renderFile(
+			TEMPLATE_FILE_PATHS.OTS_MEMO,
+			createRenderServiceStub(webUrl),
+		);
 
-    expect(otsMemoResponse.text).toBe(otsMemoEjs);
-    expect(otsMemoResponse.headers['content-type']).toBe(
-      'text/html; charset=utf-8',
-    );
-  });
+		const otsMemoResponse = await request(app.getHttpServer())
+			.get('/memo/ots')
+			.expect(200);
 
-  it('/memo/vijay (GET)', async () => {
-    const vijayMemoEjs = await renderFile(
-      TEMPLATE_FILE_PATHS.VIJAY_MEMO,
-      renderServiceStub,
-    );
+		expect(otsMemoResponse.text).toBe(otsMemoEjs);
+		expect(otsMemoResponse.headers['content-type']).toBe(
+			'text/html; charset=utf-8',
+		);
+	});
 
-    const vijayMemoResponse = await request(app.getHttpServer())
-      .get('/memo/vijay')
-      .expect(200);
+	it('/memo/vijay (GET)', async () => {
+		const vijayMemoEjs = await renderFile(
+			TEMPLATE_FILE_PATHS.VIJAY_MEMO,
+			createRenderServiceStub(webUrl),
+		);
 
-    expect(vijayMemoResponse.text).toBe(vijayMemoEjs);
-    expect(vijayMemoResponse.headers['content-type']).toBe(
-      'text/html; charset=utf-8',
-    );
-  });
+		const vijayMemoResponse = await request(app.getHttpServer())
+			.get('/memo/vijay')
+			.expect(200);
 
-  it('/memo/ots (POST)', async () => {
-    const otsMemoResponse = await request(app.getHttpServer())
-      .post('/memo/ots')
-      .send(memoStub)
-      .expect(201);
+		expect(vijayMemoResponse.text).toBe(vijayMemoEjs);
+		expect(vijayMemoResponse.headers['content-type']).toBe(
+			'text/html; charset=utf-8',
+		);
+	});
 
-    expect(otsMemoResponse.headers['content-type']).toBe('application/pdf');
-    expect(otsMemoResponse.headers['content-disposition']).toContain(
-      `attachment; filename=${memoStub.Truck_number}.pdf`,
-    );
+	it('/memo/ots (POST)', async () => {
+		const otsMemoResponse = await request(app.getHttpServer())
+			.post('/memo/ots')
+			.send(memoStub)
+			.expect(201);
 
-    const receivedBuffer = otsMemoResponse.body as Buffer;
-    expect(receivedBuffer.length).toBeGreaterThan(0);
-  }, 10000);
+		expect(otsMemoResponse.headers['content-type']).toBe('application/pdf');
+		expect(otsMemoResponse.headers['content-disposition']).toContain(
+			`attachment; filename=${memoStub.Truck_number}.pdf`,
+		);
 
-  it('/memo/vijay (POST)', async () => {
-    const vijayMemoResponse = await request(app.getHttpServer())
-      .post('/memo/vijay')
-      .send(memoStub)
-      .expect(201);
+		const receivedBuffer = otsMemoResponse.body as Buffer;
+		expect(receivedBuffer.length).toBeGreaterThan(0);
+	}, 10000);
 
-    expect(vijayMemoResponse.headers['content-type']).toBe('application/pdf');
-    expect(vijayMemoResponse.headers['content-disposition']).toContain(
-      `attachment; filename=${memoStub.Truck_number}.pdf`,
-    );
+	it('/memo/vijay (POST)', async () => {
+		const vijayMemoResponse = await request(app.getHttpServer())
+			.post('/memo/vijay')
+			.send(memoStub)
+			.expect(201);
 
-    const receivedBuffer = vijayMemoResponse.body as Buffer;
-    expect(receivedBuffer.length).toBeGreaterThan(0);
-  }, 10000);
+		expect(vijayMemoResponse.headers['content-type']).toBe('application/pdf');
+		expect(vijayMemoResponse.headers['content-disposition']).toContain(
+			`attachment; filename=${memoStub.Truck_number}.pdf`,
+		);
+
+		const receivedBuffer = vijayMemoResponse.body as Buffer;
+		expect(receivedBuffer.length).toBeGreaterThan(0);
+	}, 10000);
 });

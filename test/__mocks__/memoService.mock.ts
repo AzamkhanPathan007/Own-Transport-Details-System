@@ -1,5 +1,3 @@
-import { createMockReadable } from './common.mock';
-
 export const mockMemoService = {
-  createMemo: jest.fn().mockResolvedValue(createMockReadable('Dummy pdf memo')),
+	createMemo: jest.fn().mockResolvedValue(Buffer.from('Dummy pdf content')),
 };

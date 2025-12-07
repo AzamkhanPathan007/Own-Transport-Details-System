@@ -2,14 +2,14 @@ import { Controller, Get, Redirect } from '@nestjs/common';
 
 @Controller()
 export class AppController {
-  @Get()
-  @Redirect('/memo/ots')
-  handleRoot() {
-    return;
-  }
+	@Get()
+	@Redirect('/memo/ots')
+	handleRoot() {
+		return;
+	}
 
-  @Get('health')
-  healthCheck() {
-    return { status: 'ok' };
-  }
+	@Get('health')
+	healthCheck() {
+		return { status: 'ok' };
+	}
 }
