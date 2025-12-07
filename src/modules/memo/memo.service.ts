@@ -1,52 +1,52 @@
 import { Injectable } from '@nestjs/common';
 import { Data, renderFile } from 'ejs';
-import { CreateMemoDto } from './dto/createMemo.dto';
 import {
-  PDF_FILE_PATHS,
-  PREDEFINED_DIMENSIONS,
+	PDF_FILE_PATHS,
+	PREDEFINED_DIMENSIONS,
 } from '../../constants/common.constants';
 import { FetchCachedLogoService } from '../../providers/fetchCachedLogo.service';
 import { PDFGeneratorService } from '../../providers/generatePdf.service';
 import { HelperMethodService } from '../../providers/helperMethods.service';
+import { CreateMemoDto } from './dto/createMemo.dto';
 
 @Injectable()
 export class MemoService {
-  constructor(
-    private readonly pdfGeneratorService: PDFGeneratorService,
-    private readonly fetchCachedLogoService: FetchCachedLogoService,
-    private readonly helperMethodService: HelperMethodService,
-  ) {}
+	constructor(
+		private readonly pdfGeneratorService: PDFGeneratorService,
+		private readonly fetchCachedLogoService: FetchCachedLogoService,
+		private readonly helperMethodService: HelperMethodService,
+	) {}
 
-  async createMemo(
-    body: CreateMemoDto,
-    CustomHeading: string,
-    CompanyLogo: string | null,
-  ) {
-    const [{ Custom_logo }, { Custom_signature }] = await Promise.all([
-      this.fetchCachedLogoService.getCustomLogo(),
-      this.fetchCachedLogoService.getSignature(),
-    ]);
+	async createMemo(
+		body: CreateMemoDto,
+		CustomHeading: string,
+		CompanyLogo: string | null,
+	) {
+		const [{ Custom_logo }, { Custom_signature }] = await Promise.all([
+			this.fetchCachedLogoService.getCustomLogo(),
+			this.fetchCachedLogoService.getSignature(),
+		]);
 
-    const { Calculated_collection, Balance, Grand_total } =
-      this.helperMethodService.calculateFields(body);
+		const { Calculated_collection, Balance, Grand_total } =
+			this.helperMethodService.calculateFields(body);
 
-    const payloadToRender: Data = {
-      ...body,
-      Calculated_collection,
-      Balance,
-      Grand_total,
-      Company_logo: CompanyLogo,
-      Custom_logo,
-      Custom_heading: CustomHeading,
-      Custom_signature,
-    };
+		const payloadToRender: Data = {
+			...body,
+			Calculated_collection,
+			Balance,
+			Grand_total,
+			Company_logo: CompanyLogo,
+			Custom_logo,
+			Custom_heading: CustomHeading,
+			Custom_signature,
+		};
 
-    const content = await renderFile(PDF_FILE_PATHS.MEMO_PDF, payloadToRender);
+		const content = await renderFile(PDF_FILE_PATHS.MEMO_PDF, payloadToRender);
 
-    return await this.pdfGeneratorService.generatePdf(
-      PREDEFINED_DIMENSIONS.MEMO_HEIGHT,
-      PREDEFINED_DIMENSIONS.MEMO_WIDTH,
-      content,
-    );
-  }
+		return await this.pdfGeneratorService.generatePdf(
+			PREDEFINED_DIMENSIONS.MEMO_HEIGHT,
+			PREDEFINED_DIMENSIONS.MEMO_WIDTH,
+			content,
+		);
+	}
 }

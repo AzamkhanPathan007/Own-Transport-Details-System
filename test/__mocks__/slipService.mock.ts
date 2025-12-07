@@ -1,5 +1,3 @@
-import { createMockReadable } from './common.mock';
-
 export const mockSlipService = {
-  createSlip: jest.fn().mockResolvedValue(createMockReadable('Dummy pdf slip')),
+	createSlip: jest.fn().mockResolvedValue(Buffer.from('Dummy pdf slip')),
 };
