@@ -2,3 +2,5 @@
 .env*
 .vscode
 .qodo
+dist
+node_modules
